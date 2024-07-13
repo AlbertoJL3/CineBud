@@ -38,9 +38,3 @@ def fetch_and_store_movie_data(movie_title):
             print(f"Movie not found: {movie_title}")
     else:
         print(f"Failed to fetch data for: {movie_title}")
-
-
-# Example: Fetch and store data for a list of movie titles
-movie_titles = ['The Matrix', 'Inception', 'Interstellar']  # Example movie titles
-for title in movie_titles:
-    fetch_and_store_movie_data(title)
