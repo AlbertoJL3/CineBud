@@ -1,9 +1,16 @@
 from flask import Flask, jsonify, request
-
-from backend.data_collection import insert_movie, get_movie, get_all_movies, update_movie, delete_movie
+from flask_cors import CORS
+from backend.routes import insert_movie, get_movie, get_all_movies, update_movie, delete_movie
 from backend.movie_service import fetch_movie_data
 
 app = Flask(__name__)
+
+CORS(app, resources={r'/*': {'origins': '*'}})
+
+# ... rest of your Flask app code
+@app.route('/')
+def home():
+    return jsonify({'message': 'Welcome to the movie API'})
 
 @app.route('/movies', methods=['POST'])
 def add_movie():
