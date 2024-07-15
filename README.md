@@ -23,3 +23,35 @@ This project aims to build a movie recommendation system that fetches movie data
    ```bash
    git clone https://github.com/AlbertoJL3/RecMe.git
    cd RecMe
+
+2. **Create a venv and activate it**
+```bash
+   python -m venv venv
+
+   # On Windows:
+   venv\Scripts\activate
+
+   # On macOS and Linux:
+   source venv/bin/activate`
+   ```
+3. **Install dependencies**
+```bash
+   pip install -r requirements.txt
+   ```
+
+#### API Endpoints
+```  bash
+POST /movies: Add a new movie to the database
+GET /movies: Retrieve all movies from the database
+GET /movies/<movie_id>: Retrieve a specific movie
+PUT /movies/<movie_id>: Update a movies information
+DELETE /movies/<movie_id>: Delete a movie from the database
+POST /recommendations: Get movie recommendations based on user preferences
+```
+#### Contributing
+- Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests.
+License
+- This project is licensed under the MIT License - see the LICENSE.md file for details.
+Acknowledgments
+- OMDb API for providing movie data
+- Hugging Face for NLP tools (if used)
