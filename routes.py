@@ -5,9 +5,9 @@ from backend.movie_service import fetch_movie_data
 
 app = Flask(__name__)
 
-CORS(app, resources={r'/*': {'origins': '*'}})
+# Allow CORS
+CORS(app)
 
-# ... rest of your Flask app code
 @app.route('/')
 def home():
     return jsonify({'message': 'Welcome to the movie API'})
@@ -30,6 +30,7 @@ def get_movie_by_id(movie_id):
 
 @app.route('/movies', methods=['GET'])
 def get_movies():
+    # Get all movies
     movies = get_all_movies()
     return jsonify(movies)
 
