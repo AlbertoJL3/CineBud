@@ -32,7 +32,7 @@ def get_all_movies():
     try:
         movies = list(collection.find())
         for movie in movies:
-            movie['id'] = str(movie['id'])
+            movie['_id'] = str(movie['_id'])
         return movies
     except Exception as e:
         print(f"An error occurred: {str(e)}")
