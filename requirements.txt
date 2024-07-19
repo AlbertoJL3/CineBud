@@ -5,7 +5,7 @@ python-dotenv
 flask
 pymongo
 requests
-openai
+openai==0.28
 flask
 CORS
 fastAPI
