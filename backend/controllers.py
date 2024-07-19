@@ -19,7 +19,7 @@ def insert_movie(movie_data):
             print(f'Movie already exists in DB: {movie_data["title"]}')
     except PyMongoError as e:
         print(f"An error occurred while inserting the movie: {str(e)}")
-        # You might want to re-raise the exception or handle it differently
+ 
 
 def get_movie(movie_id):
     try:
