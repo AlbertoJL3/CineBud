@@ -2,6 +2,7 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 from pymongo.errors import PyMongoError
 from config import MONGO_URI
+from backend.movie_services import fetch_movie_data
 
 try:
     client = MongoClient(MONGO_URI, server_api=ServerApi('1'))
@@ -9,6 +10,29 @@ try:
     collection = db['movies']
 except PyMongoError as e:
     print(f"Failed to connect to the database: {str(e)}")
+
+def process_movies(title, year):
+  
+    result = []
+
+    existing_movie = collection.find_one({'title': title, 'year': year})
+
+    if existing_movie:
+        # Convert ObjectId to string for JSON serialization
+        existing_movie['_id'] = str(existing_movie['_id'])
+        result.append(existing_movie)
+        
+    else:
+        # Step 3: Fetch movie data from OMDb API
+        movie_data = fetch_movie_data(title, year)
+
+        if movie_data:
+            # Step 4: Insert the new movie into the database
+            inserted_movie = insert_movie(movie_data)
+            if inserted_movie:
+                result.append(inserted_movie)
+
+    return result
 
 def insert_movie(movie_data):
     try:
@@ -18,8 +42,7 @@ def insert_movie(movie_data):
         else:
             print(f'Movie already exists in DB: {movie_data["title"]}')
     except PyMongoError as e:
-        print(f"An error occurred while inserting the movie: {str(e)}")
- 
+        print(f"An error occurred while inserting the movie: {str(e)}") 
 
 def get_movie(movie_id):
     try:

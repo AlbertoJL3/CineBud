@@ -1,14 +1,15 @@
 import requests
 from config import OMDB_API_KEY
 
-def fetch_movie_data(movie_title):
-    url = f'http://www.omdbapi.com/?t={movie_title}&apikey={OMDB_API_KEY}&plot=full'
+def fetch_movie_data(movie_title, year):
+    url = f'http://www.omdbapi.com/?t={movie_title}&apikey={OMDB_API_KEY}&plot=full&y={year}'
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
         if data['Response'] == 'True':
             return {
                 'id': data['imdbID'],
+                'year':data['Year'],
                 'title': data['Title'],
                 'genres': data['Genre'].split(', '),
                 'actors': data['Actors'].split(', '),

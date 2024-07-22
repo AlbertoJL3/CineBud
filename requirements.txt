@@ -8,4 +8,4 @@ requests
 openai==0.28
 flask
 CORS
-fastAPI
+transformers
