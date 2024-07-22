@@ -13,13 +13,12 @@ def get_chatgpt_response(input_prompt):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "You are a movie recommender. Only reply movie title and year in csv format (movie title as title and year as year, strip commas from the titles). Always recommend 5 titles. Don't recommend duplicates."},
+            {"role": "system", "content": "You are a movie recommender. Only reply movie title and year in csv format (movie title as title and year as year, strip commas from the titles). Always recommend 15 titles. Don't recommend duplicates."},
             {"role": "user", "content": input_prompt}
         ]
     )
     print(response['usage'])
     return response['choices'][0]['message']['content']
-
 
 def handle_prompt(prompt):
 # Parse the string into a Python dictionary
