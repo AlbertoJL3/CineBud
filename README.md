@@ -38,6 +38,7 @@ This project aims to build a movie recommendation system that fetches movie data
 ```bash
    pip install -r requirements.txt
    ```
+4. **Run app_routes.py**
 
 #### API Endpoints
 ```  bash
@@ -48,6 +49,7 @@ PUT /movies/<movie_id>: Update a movies information
 DELETE /movies/<movie_id>: Delete a movie from the database
 POST /recommendations: Get movie recommendations based on user preferences
 ```
+
 #### Contributing
 - Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests.
 License
