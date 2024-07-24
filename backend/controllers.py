@@ -12,28 +12,26 @@ except PyMongoError as e:
     print(f"Failed to connect to the database: {str(e)}")
 
 def process_movies(title, year):
-  
-    result = []
 
     existing_movie = collection.find_one({'title': title, 'year': year})
 
     if existing_movie:
         # Convert ObjectId to string for JSON serialization
         existing_movie['_id'] = str(existing_movie['_id'])
-        result.append(existing_movie)
         
+        return existing_movie
     else:
         # Step 3: Fetch movie data from OMDb API
         movie_data = fetch_movie_data(title, year)
 
         if movie_data:
+
             # Step 4: Insert the new movie into the database
             inserted_movie = insert_movie(movie_data)
-            if inserted_movie: 
-                retrieved = collection.find_one({'title': title, 'year': year})
-                result.append(retrieved)
-
-    return result
+            return movie_data
+        else: 
+            return []
+                
 
 def insert_movie(movie_data):
     try:

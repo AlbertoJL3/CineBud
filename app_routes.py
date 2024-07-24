@@ -72,9 +72,13 @@ def movie_results():
     except Exception as e:
         return render_template('error.html', message="An error occurred while processing movie data.")
     
-    print("test: ", movies)
-    flattened_movies = [movie for sublist in movies for movie in sublist]
-    
+    flattened_movies = []
+    for sublist in movies:
+        if isinstance(sublist, list):
+            flattened_movies.extend(movie for movie in sublist if movie)
+        elif sublist:  # If it's not a list but still a truthy value
+            flattened_movies.append(sublist)
+
     return render_template('movie_results.html', movies=flattened_movies)
 
 if __name__ == '__main__':
