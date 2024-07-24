@@ -1,5 +1,5 @@
 # RecMe
-This repo is for making a movie-recommendation system that leverages ML/AI tools combined with React and Node.js to deliver movie recommendations based on the user's ratings of movies. 
+This repo is for making a movie-recommendation system that leverages ML/AI tools combined with Flask, MongoDB, PyMongo and other python frameworks to deliver movie recommendations based on the user's unique preferences such as moods, movie details like runtime, or general theme of the plot. 
 
 ## Overview
 This project aims to build a movie recommendation system that fetches movie data from the OMDb API and stores it in a MongoDB database. The data is then used to generate personalized movie recommendations based on user preferences.
@@ -16,7 +16,7 @@ This project aims to build a movie recommendation system that fetches movie data
 - Python 3.x
 - MongoDB
 - OMDb API Key
-- Hugging Face API Key (optional for advanced user preference processing)
+- ChatGPT-API
 
 ### Installation
 1. **Clone the repository:**
