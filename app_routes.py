@@ -64,8 +64,7 @@ def movie_results():
         
         for _, row in movies_data.iterrows():
             movie_data = process_movies(row['title'], str(row['year']))
-            if movie_data:
-                movies.append(movie_data)
+            movies.append(movie_data)
 
     except FileNotFoundError:
         return render_template('error.html', message="Movie data not found.")

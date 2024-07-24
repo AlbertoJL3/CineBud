@@ -9,3 +9,6 @@ openai==0.28
 flask
 CORS
 transformers
+asyncio
+hypercorn
+unidecode

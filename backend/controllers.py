@@ -29,8 +29,9 @@ def process_movies(title, year):
         if movie_data:
             # Step 4: Insert the new movie into the database
             inserted_movie = insert_movie(movie_data)
-            if inserted_movie:
-                result.append(inserted_movie)
+            if inserted_movie: 
+                retrieved = collection.find_one({'title': title, 'year': year})
+                result.append(retrieved)
 
     return result
 
