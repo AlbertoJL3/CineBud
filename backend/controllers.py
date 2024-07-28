@@ -3,9 +3,10 @@ from pymongo.server_api import ServerApi
 from pymongo.errors import PyMongoError
 from config import MONGO_URI
 from backend.movie_services import fetch_movie_data
+import certifi
 
 try:
-    client = MongoClient(MONGO_URI, server_api=ServerApi('1'))
+    client = MongoClient(MONGO_URI, server_api=ServerApi('1'), tlsCAFile=certifi.where())
     db = client['moviesdb']
     collection = db['movies']
 except PyMongoError as e:
@@ -25,7 +26,6 @@ def process_movies(title, year):
         movie_data = fetch_movie_data(title, year)
 
         if movie_data:
-
             # Step 4: Insert the new movie into the database
             inserted_movie = insert_movie(movie_data)
             return movie_data
