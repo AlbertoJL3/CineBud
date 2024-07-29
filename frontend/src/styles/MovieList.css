@@ -1,0 +1,31 @@
+.movie-list-container {
+    width: 100%;
+    height: 80vh; /* Adjust this value as needed */
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .movie-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  
+  /* Styling the scrollbar for WebKit browsers */
+  .movie-list-container::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .movie-list-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  .movie-list-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+  }
+  
+  .movie-list-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
