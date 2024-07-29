@@ -59,7 +59,7 @@ function Movies() {
                     onChange={(e) => setPrompt(e.target.value)}
                     placeholder="Enter your movie recommendation prompt"
                 />
-               <button type="submit" aria-label="Submit">-></button>
+               <button type="submit" aria-label="Submit"></button>
             </form>
 
             {promptResults.length > 0 && (
