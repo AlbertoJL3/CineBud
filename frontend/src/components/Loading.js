@@ -3,8 +3,20 @@ import '../styles/Loading.css';
 
 const Loading = () => {
     return (
-        <div className="loading-container">
-            <div className="spiral"></div>
+        <div className="container">
+            <div className="particle"></div>
+            <div className="particle"></div>
+            <div className="particle"></div>
+            <div className="particle"></div>
+            <div className="particle"></div>
+            <div className="particle"></div>
+            <div className="particle"></div>
+            <div className="particle"></div>
+            <div className="particle"></div>
+            <div className="particle"></div>
+            <div className="particle"></div>
+            <div className="particle"></div>
+            <div className="particle"></div>
         </div>
     );
 };
