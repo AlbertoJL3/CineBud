@@ -1,9 +1,12 @@
 import React from 'react';
+import '../styles/Loading.css';
 
-function Loading() {
+const Loading = () => {
     return (
-        <div>Loading...</div>
+        <div className="loading-container">
+            <div className="spiral"></div>
+        </div>
     );
-}
+};
 
 export default Loading;

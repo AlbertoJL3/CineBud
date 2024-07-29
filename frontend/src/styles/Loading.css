@@ -1,0 +1,51 @@
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.spiral {
+    width: 0;
+    height: 0;
+    border: 1px solid transparent;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: spin 5s linear infinite;
+    position: relative;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Fibonacci spiral segments */
+.spiral::before,
+.spiral::after {
+    content: '';
+    position: absolute;
+    border: inherit;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: inherit;
+}
+
+.spiral::before {
+    width: 21.7px;
+    height: 21.7px;
+    top: -10.85px;
+    left: -10.85px;
+}
+
+.spiral::after {
+    width: 35.2px;
+    height: 35.2px;
+    top: -17.6px;
+    left: -17.6px;
+}
