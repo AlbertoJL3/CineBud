@@ -1,5 +1,5 @@
 .movie-card {
-  background-color: #1e90ff; /* This is a shade of blue (dodger blue) */
+  background-color: #5390D9; /* This is a shade of blue (dodger blue) */
   /* or you could use */
   /* background-color: rgb(30, 144, 255); */
   /* or */
@@ -9,7 +9,7 @@
   border-radius: 10px;
   padding: 15px;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px #7400B8(0,0,0,0.1);
   transition: transform 0.3s;
   color:white
 }

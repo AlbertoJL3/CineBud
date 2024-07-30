@@ -9,7 +9,17 @@
   /* Update this in your src/styles/Movies.css file */
 
 .prompt-form {
-    background-color: #f0f0f0;
+    background: linear-gradient(
+      135deg,
+      rgba(168, 58, 150, 0.8),
+      rgba(255, 255, 255, 0.2)
+    ),
+    linear-gradient(
+      to bottom right,
+      rgba(168, 58, 150, 0.8),
+      rgba(255, 255, 255, 0.1)
+    );
+    backdrop-filter: blur(10px);
     border-radius: 25px;
     padding: 10px;
     width: 80%;
@@ -25,21 +35,27 @@
     height: 20px; 
     border-radius: 20px;
     padding: 10px 15px;
-    border: 1px solid #ccc;
+    border: 1px solid linear-gradient(
+      135deg,
+      rgba(168, 58, 150, 0.8),
+      rgba(255, 255, 255, 0.2)
+    ),;
     resize: none;
     font-size: 16px;
     line-height: 20px;
     overflow: hidden; 
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #1b37aa
   }
   
   .prompt-form button {
     position: absolute;
-    width: 30px;
-    height: 35px;
+    width: 5%;
+    height: 60%;
     margin: -15px;
     border-radius: 20px;
-    right: 20px; /* Position outside the prompt box */
-    background-color: #4CAF50;
+    right: 3%; /* Position outside the prompt box */
+    background-color: rgba(255, 255, 255, 0.9);
     border: none;
     color: white
   }
@@ -52,6 +68,17 @@
   }
 
 .movie-card {
+  background: linear-gradient(
+    135deg,
+    rgba(168, 58, 150, 0.8),
+    rgba(255, 255, 255, 0.2)
+  ),
+  linear-gradient(
+    to bottom right,
+    rgba(168, 58, 150, 0.8),
+    rgba(255, 255, 255, 0.1)
+  );
+    color: white;
     border-radius: 10px;
     padding: 15px;
     text-align: center;
@@ -74,18 +101,48 @@
   .movie-card h3 {
     margin: 10px 0;
     font-size: 1.2em;
-    color: #253952;
+    color: white;
   }
   
   .movie-card p {
     margin: 5px 0;
     font-size: 0.9em;
-    color: #253952;
+    color: white;
   }
   
+  .movies-page h1 {
+    color: white
+  }
   /* Remove the .movie-card-actions styles as they're no longer needed */
   
+  .submit-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #a83a96; /* Your gradient or button background color */
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    height: 100%;
+}
+
+  .submit-button i,
+  .submit-button svg {
+      color: #5E60CE; /* Adjust icon color */
+      width: 1em;
+      height: 100%;
+
+  }
+
+  /* Optional: Add hover effect */
+  .submit-button:hover {
+      background-color: #8b2f7a; /* A darker shade for hover effect */
+  }
+
+
   .error {
     color: red;
     margin-top: 20px;
   }
+  

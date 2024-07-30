@@ -3,6 +3,7 @@ import { fetchMovies, updateMovie, deleteMovie, submitPrompt } from '../utils/ap
 import Loading from '../components/Loading';
 import MovieList from '../components/MovieList';
 import MovieCard from '../components/MovieCard';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function Movies() {
     console.log('Movies Rendered...')
@@ -51,7 +52,7 @@ function Movies() {
 
     return (
         <div className="movies-page">
-            <h1>Movies</h1>
+            <h1>BoxOffice</h1>
 
             <form className="prompt-form" onSubmit={handlePromptSubmit}>
                 <textarea
@@ -59,12 +60,13 @@ function Movies() {
                     onChange={(e) => setPrompt(e.target.value)}
                     placeholder="Enter your movie recommendation prompt"
                 />
-               <button type="submit" aria-label="Submit"></button>
+               <button type="submit" aria-label="Submit" className="submit-button">
+            <i className="fas fa-check"></i> {/* FontAwesome check icon */}</button>
             </form>
 
             {promptResults.length > 0 && (
                 <div>
-                    <h2>Prompt Results</h2>
+                    <h2>Results</h2>
                     <ul>
                         {promptResults.map((movie, index) => (
                             <li key={index}>{movie.title} ({movie.year})</li>

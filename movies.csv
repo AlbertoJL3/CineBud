@@ -1,87 +1,111 @@
 title,year
-"The Godfather", 1972
-"The Shawshank Redemption", 1994
-"The Dark Knight", 2008
-"Schindler's List", 1993
-"Forrest Gump", 1994
-"Goodfellas", 1990
-"The Lord of the Rings: The Return of the King", 2003
-"The Matrix", 1999
-"Pulp Fiction", 1994
-"The Silence of the Lambs", 1991
-"The Departed", 2006
-"Saving Private Ryan", 1998
-"Gladiator", 2000
-"Braveheart", 1995
-"The Lion King", 1994
-"The Green Mile", 1999
-"Titanic", 1997
-"Terminator 2: Judgment Day", 1991
-"Jurassic Park", 1993
-"Back to the Future", 1985
-"The Shining", 1980
-"Fight Club", 1999
-"Inception", 2010
-"Seven", 1995
-"The Prestige", 2006
-"American Beauty", 1999
-"The Godfather: Part II", 1974
-"Raiders of the Lost Ark", 1981
-"Jaws", 1975
-"The Terminator", 1984
-"Toy Story", 1995
-"Star Wars: Episode IV - A New Hope", 1977
-"Die Hard", 1988
-"Alien", 1979
-"Aliens", 1986
-"The Exorcist", 1973
-"The Sixth Sense", 1999
-"Psycho", 1960
-"Finding Nemo", 2003
-"Up", 2009
-"Avatar", 2009
-"Harry Potter and the Deathly Hallows: Part 2", 2011
-"Forrest Gump", 1994
-"Schindler's List", 1993
-"The Lord of the Rings: The Return of the King", 2003
-"The Dark Knight", 2008
-"Pulp Fiction", 1994
-"The Lord of the Rings: The Fellowship of the Ring", 2001
-"The Godfather", 1972
-"Fight Club", 1999
-"Forrest Gump", 1994
-"Goodfellas", 1990
-"The Shawshank Redemption", 1994
-"The Lord of the Rings: The Two Towers", 2002
-"The Matrix", 1999
-"American History X", 1998
-"Schindler's List", 1993
-"The Green Mile", 1999
-"The Pianist", 2002
-"Gran Torino", 2008
-"Braveheart", 1995
-"Saving Private Ryan", 1998
-"Gladiator", 2000
-"The Departed", 2006
-"Inglourious Basterds", 2009
-"The Prestige", 2006
-"The Silence of the Lambs", 1991
-"Shutter Island", 2010
-"Eternal Sunshine of the Spotless Mind", 2004
-"Black Swan", 2010
-"The Social Network", 2010
-"The Curious Case of Benjamin Button", 2008
-"Memento", 2000
-"La La Land", 2016
-"The Shape of Water", 2017
-"The Revenant", 2015
-"Spotlight", 2015
-"12 Years a Slave", 2013
-"Birdman or (The Unexpected Virtue of Ignorance)", 2014
-"Argo", 2012
-"The Artist", 2011
-"Slumdog Millionaire", 2008
-"No Country for Old Men", 2007
-"Million Dollar Baby", 2004
-"The Lord of the Rings: The Fellowship of the Ring", 2001
-"As Good as It Gets", 1997
+"Parasite",2019
+"La La Land",2016
+"The Shawshank Redemption",1994
+"The Godfather",1972
+"The Dark Knight",2008
+"Schindler's List",1993
+"Pulp Fiction",1994
+"Forrest Gump",1994
+"Fight Club",1999
+"The Matrix",1999
+"Goodfellas",1990
+"Interstellar",2014
+"Whiplash",2014
+"Inception",2010
+"Joker",2019
+"The Silence of the Lambs",1991
+"Titanic",1997
+"Gladiator",2000
+"The Green Mile",1999
+"The Lion King",1994
+"The Departed",2006
+"The Grand Budapest Hotel",2014
+"Amélie",2001
+"Léon: The Professional",1994
+"Eternal Sunshine of the Spotless Mind",2004
+"Oldboy",2003
+"Her",2013
+"City of God",2002
+"The Prestige",2006
+"Memento",2000
+"No Country for Old Men",2007
+"Drive",2011
+"Blade Runner 2049",2017
+"Mad Max: Fury Road",2015
+"Black Swan",2010
+"Birdman",2014
+"The Revenant",2015
+"Arrival",2016
+"The Social Network",2010
+"Django Unchained",2012
+"Gravity",2013
+"The Wolf of Wall Street",2013
+"American Beauty",1999
+"Requiem for a Dream",2000
+"Avengers: Endgame",2019
+"Avatar",2009
+"Jurassic Park",1993
+"Forrest Gump",1994
+"Back to the Future",1985
+"The Terminator",1984
+"The Shining",1980
+"Jurassic Park",1993
+"Spirited Away",2001
+"Inglourious Basterds",2009
+"The Avengers",2012
+"Black Panther",2018
+"Mad Max: Fury Road",2015
+"The Shape of Water",2017
+"The Imitation Game",2014
+"La La Land",2016
+"Manchester by the Sea",2016
+"Moonlight",2016
+"The Irishman",2019
+"1917",2019
+"Spotlight",2015
+"A Beautiful Mind",2001
+"Slumdog Millionaire",2008
+"Million Dollar Baby",2004
+"12 Years a Slave",2013
+"The Hurt Locker",2008
+"Argo",2012
+"Crash",2004
+"The Curious Case of Benjamin Button",2008
+"The Artist",2011
+"12 Years a Slave",2013
+"Birdman",2014
+"Spotlight",2015
+"Moonlight",2016
+"The Shape of Water",2017
+"Green Book",2018
+"Parasite",2019
+"The King's Speech",2010
+"Black Swan",2010
+"The Social Network",2010
+"The Departed",2006
+"The Lord of the Rings: The Return of the King",2003
+"Chicago",2002
+"A Beautiful Mind",2001
+"Gladiator",2000
+"American Beauty",1999
+"Shakespeare in Love",1998
+"Titanic",1997
+"The English Patient",1996
+"Braveheart",1995
+"Forrest Gump",1994
+"Scent of a Woman",1992
+"Dances with Wolves",1990
+"Rain Man",1988
+"Platoon",1986
+"Out of Africa",1985
+"Amadeus",1984
+"Gandhi",1982
+"Chariots of Fire",1981
+"Ordinary People",1980
+"Kramer vs. Kramer",1979
+"Annie Hall",1977
+"One Flew Over the Cuckoo's Nest",1975
+"The Godfather",1972
+"The French Connection",1971
+"Patton",1970

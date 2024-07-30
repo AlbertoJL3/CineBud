@@ -1,7 +1,7 @@
 // src/components/GradientBackground.js
-
+// Gradient Background for the App
 import React from 'react';
-import '../styles/gradient.css';
+import '../../styles/gradient.css';
 
 function GradientBackground({ children }) {
   return (
