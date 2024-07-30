@@ -1,10 +1,17 @@
 .movie-card {
+  background-color: #1e90ff; /* This is a shade of blue (dodger blue) */
+  /* or you could use */
+  /* background-color: rgb(30, 144, 255); */
+  /* or */
+  /* background-color: blue; */
+  
+  /* Keep other existing styles */
   border-radius: 10px;
   padding: 15px;
   text-align: center;
-  background-color: #f0f0f0;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   transition: transform 0.3s;
+  color:white
 }
 
 .movie-card:hover {
@@ -22,11 +29,11 @@
 .movie-card h3 {
   margin: 10px 0;
   font-size: 1.2em;
-  color: #333;
+  color: white;
 }
 
 .movie-card p {
   margin: 5px 0;
   font-size: 0.9em;
-  color: #666;
+  color: white;
 }
