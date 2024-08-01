@@ -3,29 +3,31 @@
     height: 80vh; /* Adjust this value as needed */
     overflow-y: auto;
     padding: 10px;
-    box-sizing: border-box;
+    box-sizing: content-box;
   }
   
-  .movie-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
-  }
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+  padding: 0px;
+  justify-items: center;
+}
+
+/* Styling the scrollbar for WebKit browsers */
+.movie-list-container::-webkit-scrollbar {
+  width: 10px;
+}
   
-  /* Styling the scrollbar for WebKit browsers */
-  .movie-list-container::-webkit-scrollbar {
-    width: 10px;
-  }
+.movie-list-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
   
-  .movie-list-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
+.movie-list-container::-webkit-scrollbar-thumb {
+  background: #80FFD8;
+  border-radius: 5px;
+}
   
-  .movie-list-container::-webkit-scrollbar-thumb {
-    background: #80FFD8;
-    border-radius: 5px;
-  }
-  
-  .movie-list-container::-webkit-scrollbar-thumb:hover {
-    background: white;
-  }
+.movie-list-container::-webkit-scrollbar-thumb:hover {
+  background: white;
+}
