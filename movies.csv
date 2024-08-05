@@ -1,111 +1,93 @@
 title,year
-"Parasite",2019
-"La La Land",2016
-"The Shawshank Redemption",1994
-"The Godfather",1972
-"The Dark Knight",2008
-"Schindler's List",1993
-"Pulp Fiction",1994
-"Forrest Gump",1994
-"Fight Club",1999
-"The Matrix",1999
-"Goodfellas",1990
-"Interstellar",2014
-"Whiplash",2014
-"Inception",2010
-"Joker",2019
-"The Silence of the Lambs",1991
-"Titanic",1997
-"Gladiator",2000
-"The Green Mile",1999
-"The Lion King",1994
-"The Departed",2006
-"The Grand Budapest Hotel",2014
-"Amélie",2001
-"Léon: The Professional",1994
-"Eternal Sunshine of the Spotless Mind",2004
-"Oldboy",2003
-"Her",2013
-"City of God",2002
-"The Prestige",2006
-"Memento",2000
-"No Country for Old Men",2007
-"Drive",2011
-"Blade Runner 2049",2017
-"Mad Max: Fury Road",2015
-"Black Swan",2010
-"Birdman",2014
-"The Revenant",2015
-"Arrival",2016
-"The Social Network",2010
-"Django Unchained",2012
-"Gravity",2013
-"The Wolf of Wall Street",2013
-"American Beauty",1999
-"Requiem for a Dream",2000
-"Avengers: Endgame",2019
-"Avatar",2009
-"Jurassic Park",1993
-"Forrest Gump",1994
-"Back to the Future",1985
-"The Terminator",1984
-"The Shining",1980
-"Jurassic Park",1993
-"Spirited Away",2001
-"Inglourious Basterds",2009
-"The Avengers",2012
-"Black Panther",2018
-"Mad Max: Fury Road",2015
-"The Shape of Water",2017
-"The Imitation Game",2014
-"La La Land",2016
-"Manchester by the Sea",2016
-"Moonlight",2016
-"The Irishman",2019
-"1917",2019
-"Spotlight",2015
-"A Beautiful Mind",2001
-"Slumdog Millionaire",2008
-"Million Dollar Baby",2004
-"12 Years a Slave",2013
-"The Hurt Locker",2008
-"Argo",2012
-"Crash",2004
-"The Curious Case of Benjamin Button",2008
-"The Artist",2011
-"12 Years a Slave",2013
-"Birdman",2014
-"Spotlight",2015
-"Moonlight",2016
-"The Shape of Water",2017
-"Green Book",2018
-"Parasite",2019
-"The King's Speech",2010
-"Black Swan",2010
-"The Social Network",2010
-"The Departed",2006
-"The Lord of the Rings: The Return of the King",2003
-"Chicago",2002
-"A Beautiful Mind",2001
-"Gladiator",2000
-"American Beauty",1999
-"Shakespeare in Love",1998
-"Titanic",1997
-"The English Patient",1996
-"Braveheart",1995
-"Forrest Gump",1994
-"Scent of a Woman",1992
-"Dances with Wolves",1990
-"Rain Man",1988
-"Platoon",1986
-"Out of Africa",1985
-"Amadeus",1984
-"Gandhi",1982
-"Chariots of Fire",1981
-"Ordinary People",1980
-"Kramer vs. Kramer",1979
-"Annie Hall",1977
-"One Flew Over the Cuckoo's Nest",1975
-"The Godfather",1972
-"The French Connection",1971
-"Patton",1970
+"Ghostbusters","1984"
+"Amadeus","1984"
+"The Terminator","1984"
+"A Nightmare on Elm Street","1984"
+"Footloose","1984"
+"Sixteen Candles","1984"
+"Once Upon a Time in America","1984"
+"Paris, Texas","1984"
+"Beverly Hills Cop","1984"
+"Gremlins","1984"
+"This Is Spinal Tap","1984"
+"The Killing Fields","1984"
+"The Karate Kid","1984"
+"The NeverEnding Story","1984"
+"Indiana Jones and the Temple of Doom","1984"
+"Romancing the Stone","1984"
+"Red Dawn","1984"
+"Police Academy","1984"
+"Repo Man","1984"
+"Top Secret!","1984"
+"A Passage to India","1984"
+"Streets of Fire","1984"
+"Purple Rain","1984"
+"Starman","1984"
+"Stop Making Sense","1984"
+"Children of the Corn","1984"
+"The Adventures of Buckaroo Banzai Across the 8th Dimension","1984"
+"Choose Me","1984"
+"The Company of Wolves","1984"
+"Ice Pirates","1984"
+"The Natural","1984"
+"Repo Man","1984"
+"Electric Dreams","1984"
+"Extreme Prejudice","1987"
+"Zelig","1983"
+"Neighbors","1981"
+"Class","1983"
+"Zoot Suit","1981"
+"Silkwood","1983"
+"Curse of the Pink Panther","1983"
+"Streamers","1983"
+"The Deadly Spawn","1983"
+"The Court Jester","1955"
+"Salt of the Earth","1954"
+"Ivanhoe","1952"
+"The African Queen","1951"
+"The Thing from Another World","1951"
+"Cinderella","1950"
+"The Set-Up","1949"
+"Anna and the King of Siam","1946"
+"The Story of G.I. Joe","1945"
+"The Yellow Rolls-Royce","1964"
+"Nightmare in the Sun","1965"
+"Seven Days in May","1964"
+"The Train","1964"
+"The Young Savages","1961"
+"The Hoodlum Priest","1961"
+"China Seas","1935"
+"Old Ironsides","1926"
+"The Gold Rush","1925"
+"The Big Parade","1925"
+"The Thief of Bagdad","1924"
+"Forbidden Fruit","1921"
+"Way Down East","1920"
+"The Birth of a Nation","1915"
+"Intolerance: Love's Struggle Throughout the Ages","1916"
+"The Kid","1921"
+"The Birth of a Nation","1915"
+"Intolerance: Love's Struggle Throughout the Ages","1916"
+"The Kid","1921"
+"A Woman of Paris","1923"
+"The Gold Rush","1925"
+"The Circus","1928"
+"City Lights","1931"
+"Modern Times","1936"
+"The Great Dictator","1940"
+"Monsieur Verdoux","1947"
+"Limelight","1952"
+"A King in New York","1957"
+"A Woman of Paris","1923"
+"The Gold Rush","1925"
+"The Circus","1928"
+"City Lights","1931"
+"Modern Times","1936"
+"The Great Dictator","1940"
+"Monsieur Verdoux","1947"
+"Limelight","1952"
+"A King in New York","1957"
+"A Countess From Hong Kong","1967"
+"The Silent World","1956"
+"The Presence of the Past (Nostalghia)","1983"
+"Identification of a Woman","1982"

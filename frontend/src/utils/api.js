@@ -46,8 +46,6 @@ export const deleteMovie = async (movieId) => {
   return response.json();
 };
 
-// In api.js, add this function:
-
 export const submitPrompt = async (prompt) => {
     const formData = new FormData();
     formData.append('prompt', prompt);

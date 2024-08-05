@@ -61,6 +61,8 @@ def movie_results():
     # Load the movies from the csv file
     try:
         movies_data = pd.read_csv('movies.csv')
+        # Remove duplicates from movies.csv
+        movies_data = movies_data.drop_duplicates(subset=['title'])
         
         for _, row in movies_data.iterrows():
             movie_data = process_movies(row['title'], str(row['year']))
