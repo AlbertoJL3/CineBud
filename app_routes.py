@@ -7,7 +7,7 @@ from backend import fetch_movie_data, get_chatgpt_response, handle_prompt, load_
 
 app = Flask(__name__)
 
-# Allow CORS
+# Allow CORS for all domains on all routes
 CORS(app)
 
 @app.route('/')
@@ -61,27 +61,23 @@ def movie_results():
     # Load the movies from the csv file
     try:
         movies_data = pd.read_csv('movies.csv')
+
         # Remove duplicates from movies.csv
         movies_data = movies_data.drop_duplicates(subset=['title'])
-        
+        print("Movies data: ", movies_data)
         for _, row in movies_data.iterrows():
             movie_data = process_movies(row['title'], str(row['year']))
             movies.append(movie_data)
 
-    except FileNotFoundError:
-        return render_template('error.html', message="Movie data not found.")
-    
+        flattened_movies = []
+        for sublist in movies:
+            if isinstance(sublist, list):
+                flattened_movies.extend(movie for movie in sublist if movie)
+            elif sublist:  # If it's not a list but still a truthy value
+                flattened_movies.append(sublist)
+        return flattened_movies
     except Exception as e:
-        return render_template('error.html', message="An error occurred while processing movie data.")
-    
-    flattened_movies = []
-    for sublist in movies:
-        if isinstance(sublist, list):
-            flattened_movies.extend(movie for movie in sublist if movie)
-        elif sublist:  # If it's not a list but still a truthy value
-            flattened_movies.append(sublist)
-
-    return render_template('movie_results.html', movies=flattened_movies)
+        print(e)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)  # Change port if needed

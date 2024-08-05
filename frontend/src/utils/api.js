@@ -58,6 +58,6 @@ export const submitPrompt = async (prompt) => {
     if (!response.ok) {
       throw new Error('Failed to process prompt');
     }
-    
+    console.log(response.json)
     return response.json();
   };
