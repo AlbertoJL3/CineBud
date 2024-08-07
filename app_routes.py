@@ -64,7 +64,7 @@ def movie_results():
 
         # Remove duplicates from movies.csv
         movies_data = movies_data.drop_duplicates(subset=['title'])
-        print("Movies data: ", movies_data)
+        print(movies_data)
         for _, row in movies_data.iterrows():
             movie_data = process_movies(row['title'], str(row['year']))
             movies.append(movie_data)

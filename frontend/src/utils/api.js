@@ -47,17 +47,19 @@ export const deleteMovie = async (movieId) => {
 };
 
 export const submitPrompt = async (prompt) => {
-    const formData = new FormData();
-    formData.append('prompt', prompt);
-    
-    const response = await fetch(`${BASE_URL}/movie_results`, {
-      method: 'POST',
-      body: formData,
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to process prompt');
-    }
-    console.log(response.json)
-    return response.json();
-  };
+  const formData = new FormData();
+  formData.append('prompt', prompt);
+  
+  const response = await fetch(`${BASE_URL}/movie_results`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to process prompt');
+  }
+
+  const data = await response.json();
+  console.log('submitPrompt response:', data);
+  return data;
+};

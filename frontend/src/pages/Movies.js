@@ -11,6 +11,7 @@ function Movies() {
   const [error, setError] = useState(null);
   const [promptResults, setPromptResults] = useState([]);
   const scrollContainerRef = useRef(null);
+  const [promptLoading, setPromptLoading] = useState(false);
 
   useEffect(() => {
     loadMovies();
@@ -36,11 +37,10 @@ function Movies() {
   const handlePromptSubmit = async (e) => {
     e.preventDefault();
     if(!prompt.trim()) return;
-    setLoading(true);
+    setPromptLoading(true);
     setError(null);
     try {
       const results = await submitPrompt(prompt);
-      console.log("Prompt results:", results);  // Add this line
       setPromptResults(results);
       setPrompt('');
       setGlassColor('rgba(255, 255, 255, 0.1)');
@@ -53,7 +53,7 @@ function Movies() {
     } catch (err) {
       setError('Failed to process prompt');
     } finally {
-      setLoading(false);
+      setPromptLoading(false);
     }
   };
 
@@ -93,16 +93,18 @@ function Movies() {
           <i className="fas fa-check"></i>
         </button>
       </form>
-      {promptResults.length > 0 && (
+      {promptLoading ? (
+        <Loading />
+     ) : promptResults.length > 0 ? (
         <div className="prompt-results-wrapper">
-          <h2>Prompt Results</h2>
+         <h2>Prompt Results</h2>
           <div className="scroll-container">
             <button className="scroll-button left" onClick={() => scroll('left')} aria-label="Scroll left">
               <i className="fas fa-chevron-left"></i>
             </button>
             <div className="prompt-results-container" ref={scrollContainerRef}>
               {promptResults.map((movie) => (
-                <div key={movie.id} className="movie-card-wrapper">
+                <div className="movie-card-wrapper">
                   <MovieCard key={movie.id} movie={movie} />
                 </div>
               ))}
@@ -112,7 +114,7 @@ function Movies() {
             </button>
           </div>
         </div>
-      )}
+      ) : null}
       <h2>All Movies</h2>
       <div className="movie-list">
         {movies.map(movie => (
