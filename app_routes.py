@@ -79,5 +79,25 @@ def movie_results():
     except Exception as e:
         print(e)
 
+
+@app.route('/popular-movies', methods=['GET'])
+def popular_movies():
+    try:
+        movies_data = pd.read_csv('popularity_movies.csv')
+        movies_data = movies_data.drop_duplicates(subset=['title'])
+        movies_data['year'] = pd.to_datetime(movies_data['release_date']).dt.year
+
+        movies = []
+        for _, row in movies_data.iterrows():
+            movie_data = process_movies(row['title'], str(row['year']))
+            if movie_data:
+                movies.append(movie_data)
+        print(movies)
+        return jsonify(movies)
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'An error occurred processing the request'}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)  # Change port if needed

@@ -63,3 +63,13 @@ export const submitPrompt = async (prompt) => {
   console.log('submitPrompt response:', data);
   return data;
 };
+
+export const getPopularMovies = async () => {
+  const response = await fetch(`${BASE_URL}/popular_movies`, {
+    method: 'GET'
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json();
+}
