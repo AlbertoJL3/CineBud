@@ -6,13 +6,23 @@
   max-width: 100%;
   overflow-x: hidden;
   color: white;
+  background: linear-gradient(
+    135deg,
+    rgba(24, 8, 32, 0.8),
+    rgba(255, 0, 0, 0.66)
+  ),
+  linear-gradient(
+    to bottom right,
+    rgba(0, 0, 0, 0.8),
+    rgb(112, 26, 26)
+  );
 }
 
 .prompt-form {
   background: linear-gradient(
     135deg,
     rgba(168, 58, 150, 0.8),
-    rgb(255, 255, 255)
+    rgba(255, 0, 0, 0.66)
   ),
   linear-gradient(
     to bottom right,
@@ -130,7 +140,7 @@
 .movie-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 10px;
   width: 100%;
   max-width: 1200px;
 }
@@ -139,12 +149,12 @@
   background: linear-gradient(
     135deg,
     rgba(168, 58, 150, 0.8),
-    rgba(255, 255, 255, 0.2)
+    rgba(255, 0, 0, 0.66)
   ),
   linear-gradient(
     to bottom right,
-    rgba(168, 58, 150, 0.8),
-    rgba(255, 255, 255, 0.1)
+    rgba(122, 43, 109, 0.8),
+    rgba(255, 0, 0, 0.66)
   );
   color: white;
   border-radius: 10px;
@@ -196,13 +206,13 @@
 
 .submit-button i,
 .submit-button svg {
-  color: #5E60CE;
-  width: 1em;
+  color: hsl(0, 94%, 61%);
+  width: .75em;
   height: 100%;
 }
 
 .submit-button:hover {
-  background-color: #8b2f7a;
+  background-color: #f8f8f8;
 }
 
 .error {

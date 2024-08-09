@@ -1,19 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Permanent+Marker&family=Rubik+Puddles&display=swap');
+
 /* src/styles/Navbar.css */
 .navbar {
   background: linear-gradient(
-    135deg,
+    45deg,
     rgba(0, 0, 0, 0.8),
-    rgba(0, 0, 0, 0.66)
+    rgba(255, 0, 0, 0.66)
   );
   backdrop-filter: blur(10px);
   height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1.75rem;
   position: sticky;
   top: 0;
   z-index: 999;
+}
+
+.bebas-neue-regular {
+  font-family: "Bebas Neue", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .navbar-container {
@@ -31,7 +39,7 @@
   justify-self: start;
   cursor: pointer;
   text-decoration: none;
-  font-size: 2rem;
+  font-size: 2.5rem;
   display: flex;
   align-items: center;
 }
@@ -48,7 +56,7 @@
   height: 80px;
 }
 
-.nav-links {
+.nav-links {  
   /* space out nav links evenly */
   color: white;
   display: flex;
@@ -60,4 +68,13 @@
 
 .nav-links:hover {
 color: pink;
+}
+
+@media screen and (max-width: 768px) {
+  .navbar-menu-icon {
+    display: none;
+  }
+  .navbar {
+    font-size: 1rem;
+  }
 }

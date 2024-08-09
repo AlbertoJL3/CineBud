@@ -82,7 +82,7 @@ function Movies() {
 
   return (
     <div className="movies-page">
-      <h1>BoxOffice</h1>
+      <h3>Not sure what to watch? Ask our AI.</h3>
       <form className="prompt-form" onSubmit={handlePromptSubmit}>
         <textarea
           value={prompt}

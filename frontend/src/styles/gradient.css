@@ -10,7 +10,7 @@
       #ff4500
     );
     background-size: 400% 400%;
-    animation: gradientAnimation 10s ease infinite;
+    animation: gradientAnimation 3s ease infinite;
     min-height: 100vh;
     margin: 0;
     padding: 0;
