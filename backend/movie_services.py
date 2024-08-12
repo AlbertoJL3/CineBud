@@ -22,3 +22,5 @@ def fetch_movie_data(movie_title, year):
                 'imdb_rating': data['imdbRating'],
             }
     return None
+
+

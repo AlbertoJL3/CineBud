@@ -28,20 +28,20 @@ def process_movies(title, year):
         if movie_data:
             # Step 4: Insert the new movie into the database
             inserted_movie = insert_movie(movie_data)
-            return movie_data
+            inserted_movie['_id'] = str(inserted_movie['_id'])
+            print('inserted_movie:', inserted_movie)
+            return inserted_movie
         else: 
             return []
                 
 
 def insert_movie(movie_data):
-    try:
-        if collection.find_one({'title': movie_data['title']}) is None:
-            collection.insert_one(movie_data)
-            print(f'Inserted {movie_data["title"]} to DB')
-        else:
-            print(f'Movie already exists in DB: {movie_data["title"]}')
-    except PyMongoError as e:
-        print(f"An error occurred while inserting the movie: {str(e)}") 
+    result = collection.insert_one(movie_data)
+    inserted_id = result.inserted_id
+    inserted_movie = collection.find_one({"_id": inserted_id})
+    if inserted_movie:
+        inserted_movie['_id'] = str(inserted_movie['_id'])
+    return inserted_movie
 
 def get_movie(movie_id):
     try:

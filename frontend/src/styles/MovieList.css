@@ -17,6 +17,7 @@
 /* Styling the scrollbar for WebKit browsers */
 .movie-list-container::-webkit-scrollbar {
   width: 10px;
+  
 }
   
 .movie-list-container::-webkit-scrollbar-track {

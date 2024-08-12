@@ -3,14 +3,15 @@
 .gradient-background {
     background: linear-gradient(
       135deg,
-      #0000ff,
+      #ff0000,
+      #653376,
+      #ff4500,
       #4b0082,
-      #5363f7,
-      #c553f7,
-      #ff4500
+      #ff4500,
+      #ffffff
     );
     background-size: 400% 400%;
-    animation: gradientAnimation 3s ease infinite;
+    animation: gradientAnimation 4s ease infinite;
     min-height: 100vh;
     margin: 0;
     padding: 0;

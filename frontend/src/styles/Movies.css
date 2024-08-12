@@ -117,6 +117,7 @@
 }
 
 .scroll-button:hover {
+  display: none;
   background: linear-gradient(
     135deg,
     rgba(168, 58, 150, 1),
@@ -166,6 +167,16 @@
 
 .movie-card:hover {
   transform: translateY(-5px);
+  background: linear-gradient(
+    135deg,
+    rgba(168, 58, 150, 0.8),
+    rgba(255, 0, 0, 0.66)
+  ),
+  linear-gradient(
+    to bottom right,
+    rgba(122, 43, 109, 0.8),
+    rgba(255, 0, 0, 0.66)
+  );
 }
 
 .movie-poster {

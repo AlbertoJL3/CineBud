@@ -1,10 +1,9 @@
 .movie-card {
   position: relative;
-  background-color: #5390D9;
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(116, 0, 184, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.1s, box-shadow 0.3s;
   color: white;
   width: 200px;
   height: 350px;
@@ -12,7 +11,7 @@
 }
 
 .movie-card:hover {
-  transform: translateY(-5px) scale(1.03);
+  transform: translateY(-3px) scale(1.03);
   box-shadow: 0 6px 12px rgba(116, 0, 184, 0.2);
 }
 
@@ -36,7 +35,6 @@
   right: 0;
   padding: 0;
   margin: 0;
-  background-color: rgba(116, 0, 184, 0.2);
 }
 
 .movie-info h3 {
@@ -55,7 +53,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(91, 62, 172, 0.95);
   padding: 5px;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -97,6 +94,11 @@
 
 .movie-card:hover .movie-details {
   opacity: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(168, 58, 150, 0.8),
+    rgba(255, 0, 0, 0.66)
+  )
 }
 
 /* Adjust the plot container if needed */
@@ -109,7 +111,7 @@
 .read-more-btn {
   background: none;
   border: none;
-  color: #0381ff;
+  color: black;
   cursor: pointer;
   font-size: 0.9em;
   padding: 0;
