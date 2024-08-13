@@ -1,28 +1,60 @@
-// src/pages/Home.js
-import React, { useState } from 'react';
-import { submitPrompt } from '../utils/api';
+import React, { useState, useEffect, useRef } from 'react';
+import { fetchMovies, submitPrompt } from '../utils/api';
 import Loading from '../components/Loading';
 import MovieCard from '../components/MovieCard';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
-function Home() {
+function Movies() {
+  const [movies, setMovies] = useState([]);
   const [prompt, setPrompt] = useState('');
-  const [promptResults, setPromptResults] = useState([]);
-  const [promptLoading, setPromptLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [promptResults, setPromptResults] = useState([]);
+  const scrollContainerRef = useRef(null);
+  
+
+  useEffect(() => {
+    loadMovies();
+  }, []);
+
+  const loadMovies = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchMovies();
+      console.log("Fetched movies:", data);  // Add this line
+      setMovies(data);
+    } catch (err) {
+      setError('Failed to load movies');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const setGlassColor = (color) => {
+    document.documentElement.style.setProperty('--glass-color', color);
+  };
 
   const handlePromptSubmit = async (e) => {
     e.preventDefault();
     if(!prompt.trim()) return;
-    setPromptLoading(true);
+    setLoading(true);
     setError(null);
     try {
       const results = await submitPrompt(prompt);
+      console.log("Prompt results:", results);  // Add this line
       setPromptResults(results);
       setPrompt('');
+      setGlassColor('rgba(255, 255, 255, 0.1)');
+      setTimeout(() => {
+        const resultsWrapper = document.querySelector('.prompt-results-wrapper');
+        if (resultsWrapper) {
+          resultsWrapper.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     } catch (err) {
       setError('Failed to process prompt');
     } finally {
-      setPromptLoading(false);
+      setLoading(false);
     }
   };
 
@@ -33,9 +65,24 @@ function Home() {
     }
   };
 
+  const scroll = (direction) => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const scrollAmount = container.offsetWidth * 0.8; // Scroll 80% of the container width
+      container.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
-    <div className="home-page">
-      <h1>BoxOffice</h1>
+    <div className="movies-page">
+      <h3>Not sure what to watch? Ask our AI.</h3>
       <form className="prompt-form" onSubmit={handlePromptSubmit}>
         <textarea
           value={prompt}
@@ -47,23 +94,28 @@ function Home() {
           <i className="fas fa-check"></i>
         </button>
       </form>
-      {promptLoading ? (
-        <Loading />
-      ) : promptResults.length > 0 ? (
+      {promptResults.length > 0 && (
         <div className="prompt-results-wrapper">
           <h2>Prompt Results</h2>
-          <div className="prompt-results-container">
-            {promptResults.map((movie) => (
-              <div className="movie-card-wrapper" key={movie.id}>
-                <MovieCard movie={movie} />
-              </div>
-            ))}
+          <div className="scroll-container">
+            <button className="scroll-button left" onClick={() => scroll('left')} aria-label="Scroll left">
+              <i className="fas fa-chevron-left"></i>
+            </button>
+            <div className="prompt-results-container" ref={scrollContainerRef}>
+              {promptResults.map((movie) => (
+                <div className="movie-card-wrapper">
+                  <MovieCard key={movie.id} movie={movie} />
+                </div>
+              ))}
+            </div>
+            <button className="scroll-button right" onClick={() => scroll('right')} aria-label="Scroll right">
+              <i className="fas fa-chevron-right"></i>
+            </button>
           </div>
         </div>
-      ) : null}
-      {error && <div className="error">{error}</div>}
+      )}
     </div>
   );
 }
 
-export default Home;
+export default Movies;

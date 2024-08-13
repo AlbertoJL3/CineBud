@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Movies from './pages/Movies';
+import Home from './pages/Home';
 import Navbar from './components/NavBar';
 import './styles/MovieList.css';
 import './styles/MovieCard.css';
@@ -14,9 +15,9 @@ function App() {
         <div className="App">
           <Navbar />
           <Routes>
-            <Route path="/" element={<Movies />} />
+            <Route path="/" element={<Home />} />
             <Route path="/movies" element={<Movies />} />
-            <Route path='/movie-results' element={<Movies />} />
+            <Route path="/watchlist" element={<Movies />} />
           </Routes>
         </div>
       </GradientBackground>

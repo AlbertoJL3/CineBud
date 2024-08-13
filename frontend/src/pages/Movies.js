@@ -82,38 +82,6 @@ function Movies() {
 
   return (
     <div className="movies-page">
-      <h3>Not sure what to watch? Ask our AI.</h3>
-      <form className="prompt-form" onSubmit={handlePromptSubmit}>
-        <textarea
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="What's your movie mood?"
-        />
-        <button type="submit" aria-label="Submit" className="submit-button">
-          <i className="fas fa-check"></i>
-        </button>
-      </form>
-      {promptResults.length > 0 && (
-        <div className="prompt-results-wrapper">
-          <h2>Prompt Results</h2>
-          <div className="scroll-container">
-            <button className="scroll-button left" onClick={() => scroll('left')} aria-label="Scroll left">
-              <i className="fas fa-chevron-left"></i>
-            </button>
-            <div className="prompt-results-container" ref={scrollContainerRef}>
-              {promptResults.map((movie) => (
-                <div className="movie-card-wrapper">
-                  <MovieCard key={movie.id} movie={movie} />
-                </div>
-              ))}
-            </div>
-            <button className="scroll-button right" onClick={() => scroll('right')} aria-label="Scroll right">
-              <i className="fas fa-chevron-right"></i>
-            </button>
-          </div>
-        </div>
-      )}
       <h2>All Movies</h2>
       <div className="movie-list">
         {movies.map(movie => (

@@ -6,7 +6,7 @@ flask
 pymongo
 requests
 openai==0.28
-flask
+flask_cors
 CORS
 transformers
 asyncio
