@@ -29,7 +29,6 @@ def process_movies(title, year):
             # Step 4: Insert the new movie into the database
             inserted_movie = insert_movie(movie_data)
             inserted_movie['_id'] = str(inserted_movie['_id'])
-            print('inserted_movie:', inserted_movie)
             return inserted_movie
         else: 
             return []

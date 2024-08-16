@@ -25,6 +25,11 @@ function Navbar() {
               Watchlist
             </Link>
           </li>
+          <li className="nav-item">
+            <Link to="/login" className="nav-links bebas-neue-regular">
+              Login
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>
