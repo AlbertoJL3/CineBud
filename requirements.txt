@@ -12,3 +12,5 @@ transformers
 asyncio
 hypercorn
 unidecode
+flask-jwt-extended 
+passlib

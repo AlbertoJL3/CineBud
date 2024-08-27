@@ -9,6 +9,7 @@ try:
     client = MongoClient(MONGO_URI, server_api=ServerApi('1'), tlsCAFile=certifi.where())
     db = client['moviesdb']
     collection = db['movies']
+    users_collection = db['users']
 except PyMongoError as e:
     print(f"Failed to connect to the database: {str(e)}")
 
