@@ -4,7 +4,9 @@ from pymongo.errors import PyMongoError
 from config import MONGO_URI
 from backend.movie_services import fetch_movie_data
 import certifi
-
+import certifi
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 try:
     client = MongoClient(MONGO_URI, server_api=ServerApi('1'), tlsCAFile=certifi.where())
     db = client['moviesdb']
@@ -12,6 +14,66 @@ try:
     users_collection = db['users']
 except PyMongoError as e:
     print(f"Failed to connect to the database: {str(e)}")
+
+def register_user(username, email, password):
+    try:
+        existing_user = users_collection.find_one({'$or': [{'username': username}, {'email': email}]})
+        if existing_user:
+            return {'error': 'Username or email already exists'}, 400
+
+        hashed_password = generate_password_hash(password)
+        new_user = {
+            'username': username,
+            'email': email,
+            'password': hashed_password
+        }
+        result = users_collection.insert_one(new_user)
+        new_user['_id'] = str(result.inserted_id)
+        del new_user['password']  # Don't send password back to client
+        return new_user, 201
+    except PyMongoError as e:
+        print(f"An error occurred while registering the user: {str(e)}")
+        return {'error': 'Registration failed'}, 500
+
+def login_user(username, password):
+    try:
+        user = users_collection.find_one({'username': username})
+        if user and check_password_hash(user['password'], password):
+            access_token = create_access_token(identity=str(user['_id']))
+            return {'access_token': access_token}, 200
+        else:
+            return {'error': 'Invalid username or password'}, 401
+    except PyMongoError as e:
+        print(f"An error occurred while logging in the user: {str(e)}")
+        return {'error': 'Login failed'}, 500
+
+@jwt_required()
+def get_user_profile():
+    try:
+        current_user_id = get_jwt_identity()
+        user = users_collection.find_one({'_id': current_user_id})
+        if user:
+            user['_id'] = str(user['_id'])
+            del user['password']  # Don't send password back to client
+            return user, 200
+        else:
+            return {'error': 'User not found'}, 404
+    except PyMongoError as e:
+        print(f"An error occurred while fetching the user profile: {str(e)}")
+        return {'error': 'Failed to fetch user profile'}, 500
+
+@jwt_required()
+def update_user_profile(update_data):
+    try:
+        current_user_id = get_jwt_identity()
+        result = users_collection.update_one({'_id': current_user_id}, {'$set': update_data})
+        if result.modified_count:
+            return {'message': 'Profile updated successfully'}, 200
+        else:
+            return {'error': 'No changes made to the profile'}, 400
+    except PyMongoError as e:
+        print(f"An error occurred while updating the user profile: {str(e)}")
+        return {'error': 'Failed to update user profile'}, 500
 
 def process_movies(title, year):
 
