@@ -1,9 +1,12 @@
 from flask import Flask, jsonify, render_template, url_for, request
 from flask_cors import CORS
 from backend import insert_movie, get_movie, get_all_movies, update_movie, delete_movie, fetch_movie_data, process_movies
+from backend import register_user, login_user, get_user_profile, update_user_profile
 from flask import render_template
 import pandas as pd
 from backend import fetch_movie_data, get_chatgpt_response, handle_prompt, load_movies_from_json
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+
 
 app = Flask(__name__)
 
@@ -13,6 +16,35 @@ CORS(app)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+# Setup the Flask-JWT-Extended extension
+app.config['JWT_SECRET_KEY'] = 'ronswansonrox12345'  # Change this!
+jwt = JWTManager(app)
+
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    user, status_code = register_user(data['username'], data['email'], data['password'])
+    return jsonify(user), status_code
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    result, status_code = login_user(data['username'], data['password'])
+    return jsonify(result), status_code
+
+@app.route('/profile', methods=['GET'])
+@jwt_required()
+def profile():
+    user, status_code = get_user_profile()
+    return jsonify(user), status_code
+
+@app.route('/profile', methods=['PUT'])
+@jwt_required()
+def update_profile():
+    data = request.get_json()
+    result, status_code = update_user_profile(data)
+    return jsonify(result), status_code
 
 @app.route('/movies', methods=['POST'])
 def add_movie():
