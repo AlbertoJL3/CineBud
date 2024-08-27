@@ -73,7 +73,6 @@ export const getPopularMovies = async () => {
   }
   return response.json();
 }
-
 export const registerUser = async (username, email, password) => {
   const response = await fetch(`${BASE_URL}/register`, {
     method: 'POST',
@@ -102,4 +101,30 @@ export const loginUser = async (username, password) => {
   return response.json();
 };
 
-export const getUserProfile = async
+export const getUserProfile = async () => {
+  const response = await fetch(`${BASE_URL}/profile`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Failed to fetch profile');
+  }
+  return response.json();
+};
+
+export const updateUserProfile = async (updateData) => {
+  const response = await fetch(`${BASE_URL}/profile`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`,
+    },
+    body: JSON.stringify(updateData),
+  });
+  if (!response.ok) {
+    throw new Error('Failed to update profile');
+  }
+  return response.json();
+};
