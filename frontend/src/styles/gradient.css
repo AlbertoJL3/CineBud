@@ -11,7 +11,7 @@
       #ffffff
     );
     background-size: 400% 400%;
-    animation: gradientAnimation 4s ease infinite;
+    animation: gradientAnimation 40s ease infinite;
     min-height: 100vh;
     margin: 0;
     padding: 0;

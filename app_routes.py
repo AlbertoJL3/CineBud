@@ -111,7 +111,6 @@ def movie_results():
     except Exception as e:
         print(e)
 
-
 @app.route('/popular-movies', methods=['GET'])
 def popular_movies():
     try:

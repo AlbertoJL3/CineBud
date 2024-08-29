@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '../utils/api';
 import '../styles/Login.css';
 
@@ -16,9 +16,7 @@ function Login() {
     try {
       const response = await loginUser(username, password);
       if (response.access_token) {
-        // Store the token in localStorage
         localStorage.setItem('token', response.access_token);
-        // Redirect to the home page or dashboard
         navigate('/');
       } else {
         setError('Login failed. Please check your credentials.');
@@ -56,6 +54,9 @@ function Login() {
         </div>
         <button type="submit">Login</button>
       </form>
+      <p>
+        Don't have an account? <Link to="/register">Register here</Link>
+      </p>
     </div>
   );
 }

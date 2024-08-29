@@ -14,7 +14,7 @@ tmdb_base_url = 'https://api.themoviedb.org/3/discover/movie'
 tmdb_params = {
     'api_key': tmdb_api_key,
     'sort_by': 'popularity.desc',
-    'primary_release_date.gte': '2021-01-01',
+    'primary_release_date.gte': '2024-01-01',
     'primary_release_date.lte': '2024-12-31',
    }
 
