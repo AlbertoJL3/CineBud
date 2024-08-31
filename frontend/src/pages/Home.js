@@ -6,27 +6,39 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function Movies() {
   const [movies, setMovies] = useState([]);
+  const [popularMovies, setPopularMovies] = useState([]); // State for popular movies
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [promptResults, setPromptResults] = useState([]);
   const scrollContainerRef = useRef(null);
   
-
   useEffect(() => {
     loadMovies();
+    loadPopularMovies(); // Load popular movies on component mount
   }, []);
 
   const loadMovies = async () => {
     setLoading(true);
     try {
       const data = await fetchMovies();
-      console.log("Fetched movies:", data);  // Add this line
+      console.log("Fetched movies:", data);
       setMovies(data);
     } catch (err) {
       setError('Failed to load movies');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadPopularMovies = async () => {
+    try {
+      const response = await fetch('http://localhost:5001/popular-movies'); // Fetch popular movies
+      const data = await response.json();
+      console.log("Fetched popular movies:", data);
+      setPopularMovies(data);
+    } catch (err) {
+      console.error('Error fetching popular movies:', err);
     }
   };
 
@@ -36,12 +48,12 @@ function Movies() {
 
   const handlePromptSubmit = async (e) => {
     e.preventDefault();
-    if(!prompt.trim()) return;
+    if (!prompt.trim()) return;
     setLoading(true);
     setError(null);
     try {
       const results = await submitPrompt(prompt);
-      console.log("Prompt results:", results);  // Add this line
+      console.log("Prompt results:", results);
       setPromptResults(results);
       setPrompt('');
       setGlassColor('rgba(255, 255, 255, 0.1)');
@@ -68,7 +80,7 @@ function Movies() {
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
     if (container) {
-      const scrollAmount = container.offsetWidth * 0.8; // Scroll 80% of the container width
+      const scrollAmount = container.offsetWidth * 0.8;
       container.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -94,6 +106,7 @@ function Movies() {
           <i className="fas fa-check"></i>
         </button>
       </form>
+
       {promptResults.length > 0 && (
         <div className="prompt-results-wrapper">
           <h2>Prompt Results</h2>
@@ -103,8 +116,8 @@ function Movies() {
             </button>
             <div className="prompt-results-container" ref={scrollContainerRef}>
               {promptResults.map((movie) => (
-                <div className="movie-card-wrapper">
-                  <MovieCard key={movie.id} movie={movie} />
+                <div className="movie-card-wrapper" key={movie.id}>
+                  <MovieCard movie={movie} />
                 </div>
               ))}
             </div>
@@ -114,6 +127,19 @@ function Movies() {
           </div>
         </div>
       )}
+
+      <h1>Popular Movies</h1>
+      <div className="popular-movies-container">
+        {popularMovies.length > 0 ? (
+          popularMovies.map(movie => (
+            <div key={movie.id} className="movie-card-wrapper">
+              <MovieCard movie={movie} />
+            </div>
+          ))
+        ) : (
+          <p>No popular movies available.</p>
+        )}
+      </div>
     </div>
   );
 }
