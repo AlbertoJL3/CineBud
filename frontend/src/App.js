@@ -9,6 +9,7 @@ import Navbar from './components/NavBar';
 import './styles/MovieList.css';
 import './styles/MovieCard.css';
 import './styles/Movies.css';
+import './styles/Home.css';
 import GradientBackground from './components/styles/gradient';
 
 function App() {
