@@ -17,7 +17,6 @@ function Movies() {
     setLoading(true);
     try {
       const data = await fetchMovies();
-      console.log("Fetched movies:", data);  // Add this line
       setMovies(data);
     } catch (err) {
       setError('Failed to load movies');

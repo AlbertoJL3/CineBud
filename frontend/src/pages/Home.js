@@ -1,21 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { fetchMovies, submitPrompt } from '../utils/api';
 import Loading from '../components/Loading';
 import MovieCard from '../components/MovieCard';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-function Movies() {
+function Home() {
   const [movies, setMovies] = useState([]);
-  const [popularMovies, setPopularMovies] = useState([]); // State for popular movies
-  const [prompt, setPrompt] = useState('');
+  const [popularMovies, setPopularMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [popularMoviesLoading, setPopularMoviesLoading] = useState(false);
+  const [prompt, setPrompt] = useState('');
   const [error, setError] = useState(null);
   const [promptResults, setPromptResults] = useState([]);
-  const scrollContainerRef = useRef(null);
-  
+  const [page, setPage] = useState(1);
+  const promptScrollContainerRef = useRef(null);
+  const popularMoviesScrollContainerRef = useRef(null);
+
   useEffect(() => {
     loadMovies();
-    loadPopularMovies(); // Load popular movies on component mount
+    loadPopularMovies(1);
   }, []);
 
   const loadMovies = async () => {
@@ -31,19 +34,24 @@ function Movies() {
     }
   };
 
-  const loadPopularMovies = async () => {
+  const loadPopularMovies = async (pageNum) => {
+    if (popularMoviesLoading) return;
+    setPopularMoviesLoading(true);
     try {
-      const response = await fetch('http://localhost:5001/popular-movies'); // Fetch popular movies
-      const data = await response.json();
-      console.log("Fetched popular movies:", data);
-      setPopularMovies(data);
+      const response = await fetch(`http://localhost:5001/popular-movies?page=${pageNum}&per_page=20`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Fetched popular movies:", data);
+        setPopularMovies(prevMovies => [...prevMovies, ...data]);
+        setPage(pageNum);
+      } else {
+        console.error('Failed to fetch popular movies:', response.statusText);
+      }
     } catch (err) {
       console.error('Error fetching popular movies:', err);
+    } finally {
+      setPopularMoviesLoading(false);
     }
-  };
-
-  const setGlassColor = (color) => {
-    document.documentElement.style.setProperty('--glass-color', color);
   };
 
   const handlePromptSubmit = async (e) => {
@@ -56,7 +64,6 @@ function Movies() {
       console.log("Prompt results:", results);
       setPromptResults(results);
       setPrompt('');
-      setGlassColor('rgba(255, 255, 255, 0.1)');
       setTimeout(() => {
         const resultsWrapper = document.querySelector('.prompt-results-wrapper');
         if (resultsWrapper) {
@@ -77,16 +84,23 @@ function Movies() {
     }
   };
 
-  const scroll = (direction) => {
-    const container = scrollContainerRef.current;
+  const scroll = useCallback((direction, containerRef) => {
+    const container = containerRef.current;
     if (container) {
       const scrollAmount = container.offsetWidth * 0.8;
+      const maxScroll = container.scrollWidth - container.clientWidth;
+      
+      if (direction === 'right' && container.scrollLeft + scrollAmount >= maxScroll) {
+        // Load more movies when scrolling to the right and near the end
+        loadPopularMovies(page + 1);
+      }
+      
       container.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
       });
     }
-  };
+  }, [page, loadPopularMovies]);
 
   if (loading) {
     return <Loading />;
@@ -107,21 +121,23 @@ function Movies() {
         </button>
       </form>
 
+      {error && <div className="error">{error}</div>}
+
       {promptResults.length > 0 && (
         <div className="prompt-results-wrapper">
           <h2>Prompt Results</h2>
           <div className="scroll-container">
-            <button className="scroll-button left" onClick={() => scroll('left')} aria-label="Scroll left">
+            <button className="scroll-button left" onClick={() => scroll('left', promptScrollContainerRef)} aria-label="Scroll left">
               <i className="fas fa-chevron-left"></i>
             </button>
-            <div className="prompt-results-container" ref={scrollContainerRef}>
+            <div className="prompt-results-container" ref={promptScrollContainerRef}>
               {promptResults.map((movie) => (
                 <div className="movie-card-wrapper" key={movie.id}>
                   <MovieCard movie={movie} />
                 </div>
               ))}
             </div>
-            <button className="scroll-button right" onClick={() => scroll('right')} aria-label="Scroll right">
+            <button className="scroll-button right" onClick={() => scroll('right', promptScrollContainerRef)} aria-label="Scroll right">
               <i className="fas fa-chevron-right"></i>
             </button>
           </div>
@@ -129,19 +145,26 @@ function Movies() {
       )}
 
       <h1>Popular Movies</h1>
-      <div className="popular-movies-container">
-        {popularMovies.length > 0 ? (
-          popularMovies.map(movie => (
-            <div key={movie.id} className="movie-card-wrapper">
-              <MovieCard movie={movie} />
-            </div>
-          ))
-        ) : (
-          <p>No popular movies available.</p>
-        )}
+      <div className="prompt-results-wrapper">
+        <div className="scroll-container">
+          <button className="scroll-button left" onClick={() => scroll('left', popularMoviesScrollContainerRef)} aria-label="Scroll left">
+            <i className="fas fa-chevron-left"></i>
+          </button>
+          <div className="prompt-results-container" ref={popularMoviesScrollContainerRef}>
+            {popularMovies.map((movie) => (
+              <div className="movie-card-wrapper" key={movie.id}>
+                <MovieCard movie={movie} />
+              </div>
+            ))}
+            {popularMoviesLoading && <div className="loading">Loading more movies...</div>}
+          </div>
+          <button className="scroll-button right" onClick={() => scroll('right', popularMoviesScrollContainerRef)} aria-label="Scroll right">
+            <i className="fas fa-chevron-right"></i>
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Movies;
+export default Home;

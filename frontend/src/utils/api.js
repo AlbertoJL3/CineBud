@@ -60,7 +60,6 @@ export const submitPrompt = async (prompt) => {
   }
 
   const data = await response.json();
-  console.log('submitPrompt response:', data);
   return data;
 };
 

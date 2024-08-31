@@ -121,8 +121,16 @@ def popular_movies():
         movies_data = movies_data.drop_duplicates(subset=['title'])
         movies_data['year'] = pd.to_datetime(movies_data['release_date']).dt.year
 
+        # Get pagination parameters from request
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 50))  # Default to 50 movies per page
+
+        # Calculate start and end index for pagination
+        start = (page - 1) * per_page
+        end = start + per_page
+
         movies = []
-        for _, row in movies_data.iterrows():
+        for _, row in movies_data.iloc[start:end].iterrows():
             # Fetch detailed movie data using the fetch_movie_data function
             movie_data = fetch_movie_data(row['title'], str(row['year']))
             if movie_data:
@@ -132,7 +140,6 @@ def popular_movies():
     except Exception as e:
         print(e)
         return jsonify({'error': 'An error occurred processing the request'}), 500
-
 
 
 if __name__ == '__main__':
