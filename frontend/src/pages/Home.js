@@ -35,15 +35,26 @@ function Home() {
   };
 
   const loadPopularMovies = async (pageNum) => {
-    if (popularMoviesLoading) return;
     setPopularMoviesLoading(true);
     try {
       const response = await fetch(`http://localhost:5001/popular-movies?page=${pageNum}&per_page=20`);
       if (response.ok) {
         const data = await response.json();
         console.log("Fetched popular movies:", data);
-        setPopularMovies(prevMovies => [...prevMovies, ...data]);
+        
+        const validMovies = data.filter(movie => {
+          const requiredFields = ['title', 'year', 'poster', 'director', 'plot'];
+          return requiredFields.every(field => 
+            movie[field] && movie[field] !== 'N/A' && movie[field] !== ''
+          );
+        });
+
+        setPopularMovies(prevMovies => [...prevMovies, ...validMovies]);
         setPage(pageNum);
+
+        if (validMovies.length < 20 && data.length === 20) {
+          loadPopularMovies(pageNum + 1);
+        }
       } else {
         console.error('Failed to fetch popular movies:', response.statusText);
       }
@@ -90,8 +101,7 @@ function Home() {
       const scrollAmount = container.offsetWidth * 0.8;
       const maxScroll = container.scrollWidth - container.clientWidth;
       
-      if (direction === 'right' && container.scrollLeft + scrollAmount >= maxScroll) {
-        // Load more movies when scrolling to the right and near the end
+      if (direction === 'right' && container.scrollLeft + scrollAmount >= maxScroll && !popularMoviesLoading) {
         loadPopularMovies(page + 1);
       }
       
@@ -100,7 +110,7 @@ function Home() {
         behavior: 'smooth'
       });
     }
-  }, [page, loadPopularMovies]);
+  }, [page, popularMoviesLoading, loadPopularMovies]);
 
   if (loading) {
     return <Loading />;
@@ -147,7 +157,12 @@ function Home() {
       <h1>Popular Movies</h1>
       <div className="prompt-results-wrapper">
         <div className="scroll-container">
-          <button className="scroll-button left" onClick={() => scroll('left', popularMoviesScrollContainerRef)} aria-label="Scroll left">
+          <button 
+            className="scroll-button left" 
+            onClick={() => scroll('left', popularMoviesScrollContainerRef)} 
+            aria-label="Scroll left"
+            disabled={popularMoviesLoading}
+          >
             <i className="fas fa-chevron-left"></i>
           </button>
           <div className="prompt-results-container" ref={popularMoviesScrollContainerRef}>
@@ -158,9 +173,15 @@ function Home() {
             ))}
             {popularMoviesLoading && <div className="loading">Loading more movies...</div>}
           </div>
-          <button className="scroll-button right" onClick={() => scroll('right', popularMoviesScrollContainerRef)} aria-label="Scroll right">
-            <i className="fas fa-chevron-right"></i>
-          </button>
+          {!popularMoviesLoading && (
+            <button 
+              className="scroll-button right" 
+              onClick={() => scroll('right', popularMoviesScrollContainerRef)} 
+              aria-label="Scroll right"
+            >
+              <i className="fas fa-chevron-right"></i>
+            </button>
+          )}
         </div>
       </div>
     </div>

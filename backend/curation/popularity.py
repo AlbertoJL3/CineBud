@@ -35,4 +35,4 @@ def show_pages(pages, title):
     df = df[['title','release_date']]
     df.to_csv(f'{title}.csv', index=False)
 
-show_pages(50, 'popularity_movies_2021_2024')
+show_pages(10, 'popularity_movies')
