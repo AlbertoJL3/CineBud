@@ -27,7 +27,7 @@
     linear-gradient(
       to bottom right,
       rgba(168, 58, 150, 0.8),
-      rgb(255, 255, 255)
+      rgb(219, 0, 0)
     );
     backdrop-filter: blur(10px);
     border-radius: 25px;
@@ -49,8 +49,8 @@
     font-size: 16px;
     line-height: 20px;
     overflow: hidden;
-    background-color: rgb(255, 255, 255);
-    color: #1b37aa;
+    background-color: rgb(77, 0, 0);
+    color: #000000;
   }
   
   .prompt-form button {
@@ -62,7 +62,7 @@
     right: 3%;
     background-color: rgba(255, 255, 255, 0.9);
     border: none;
-    color: white;
+    color: rgb(117, 1, 1);
   }
   
   .prompt-results-wrapper {

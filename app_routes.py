@@ -30,7 +30,18 @@ def register():
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    result, status_code = login_user(data['username'], data['password'])
+    user_input = data.get('username', '').lower()  # This could be either username or email
+    password = data.get('password')
+
+    # First, try to login with the input as username
+    result, status_code = login_user(user_input, password)
+
+    if status_code != 200:
+        # If login with username failed, try with email
+        # You might need to create a new function `login_user_by_email` in controllers.py
+        # or modify the existing `login_user` function to handle both cases
+        result, status_code = login_user(user_input, password, is_email=True)
+
     return jsonify(result), status_code
 
 @app.route('/profile', methods=['GET'])
@@ -140,7 +151,6 @@ def popular_movies():
     except Exception as e:
         print(e)
         return jsonify({'error': 'An error occurred processing the request'}), 500
-
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)  # Change port if needed

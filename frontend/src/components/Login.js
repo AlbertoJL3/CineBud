@@ -5,7 +5,7 @@ import { useAuth } from '../utils/AuthContext';
 import '../styles/Login.css';
 
 function Login() {
-  const [username, setUsername] = useState('');
+  const [userInput, setUserInput] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -16,7 +16,10 @@ function Login() {
     setError('');
 
     try {
-      const response = await loginUser(username, password);
+      // Convert userInput to lowercase for non-case-sensitive login
+      const lowercaseInput = userInput.toLowerCase();
+      
+      const response = await loginUser(lowercaseInput, password);
       if (response.access_token) {
         login(response);
         navigate('/');
@@ -35,12 +38,12 @@ function Login() {
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="userInput">Username or Email:</label>
           <input
             type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="userInput"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
             required
           />
         </div>

@@ -34,17 +34,21 @@ def register_user(username, email, password):
     except PyMongoError as e:
         print(f"An error occurred while registering the user: {str(e)}")
         return {'error': 'Registration failed'}, 500
-
-def login_user(username, password):
+    
+def login_user(user_input, password, is_email=False):
     try:
-        user = users_collection.find_one({'username': username})
+        if is_email:
+            user = users_collection.find_one({'email': user_input.lower()})
+        else:
+            user = users_collection.find_one({'username': user_input.lower()})
+
         if user and check_password_hash(user['password'], password):
             access_token = create_access_token(identity=str(user['_id']))
             return {'access_token': access_token}, 200
         else:
-            return {'error': 'Invalid username or password'}, 401
+            return {'error': 'Invalid username/email or password'}, 401
     except PyMongoError as e:
-        print(f"An error occurred while logging in the user: {str(e)}")
+        print(f"Invalid username/email or password: {str(e)}")
         return {'error': 'Login failed'}, 500
 
 @jwt_required()

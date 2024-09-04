@@ -34,10 +34,10 @@ export const submitPrompt = (prompt) => {
 export const getPopularMovies = () => axiosInstance.get('/popular_movies').then(res => res.data);
 
 export const registerUser = (username, email, password) => 
-  axios.post(`${BASE_URL}/register`, { username, email, password }).then(res => res.data);
+  axios.post(`${BASE_URL}/register`, { username: username.toLowerCase(), email: email.toLowerCase(), password }).then(res => res.data);
 
-export const loginUser = (username, password) => 
-  axios.post(`${BASE_URL}/login`, { username, password }).then(res => res.data);
+export const loginUser = (userInput, password) => 
+  axios.post(`${BASE_URL}/login`, { username: userInput, email: userInput, password }).then(res => res.data);
 
 export const getUserProfile = () => axiosInstance.get('/profile').then(res => res.data);
 
