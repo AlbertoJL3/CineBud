@@ -1,58 +1,22 @@
-from pymongo import MongoClient
-from pymongo.server_api import ServerApi
-from config import MONGO_URI
-import certifi
+import pandas as pd
+from backend.controllers import process_movies
 
-def remove_duplicate_movies():
-    try:
-        # Connect to MongoDB
-        client = MongoClient(MONGO_URI, server_api=ServerApi('1'), tlsCAFile=certifi.where())
-        db = client['moviesdb']
-        collection = db['movies']
 
-        # Find duplicate movies based on title and year
-        pipeline = [
-            {
-                "$group": {
-                    "_id": {"title": "$title", "year": "$year"},
-                    "uniqueIds": {"$addToSet": "$_id"},
-                    "count": {"$sum": 1}
-                }
-            },
-            {
-                "$match": {
-                    "count": {"$gt": 1}
-                }
-            }
-        ]
+movies_data = pd.read_csv('popularity_movies.csv')
+# Remove duplicates and extract the year from the release_date
+movies_data = movies_data.drop_duplicates(subset=['title'])
+movies_data['year'] = pd.to_datetime(movies_data['release_date']).dt.year
+movies_data = movies_data[['title', 'year']]
+print(movies_data)
 
-        duplicate_groups = list(collection.aggregate(pipeline))
-
-        total_duplicates = 0
-        for group in duplicate_groups:
-            # Keep the first occurrence and remove the rest
-            duplicate_ids = group['uniqueIds'][1:]
-            total_duplicates += len(duplicate_ids)
-            collection.delete_many({"_id": {"$in": duplicate_ids}})
-
-        print(f"Removed {total_duplicates} duplicate movies.")
-
-        # Optionally, you can also remove movies with missing essential fields
-        missing_fields_query = {
-            "$or": [
-                {"title": {"$exists": False}},
-                {"year": {"$exists": False}},
-                {"title": ""},
-                {"year": ""}
-            ]
-        }
-        result = collection.delete_many(missing_fields_query)
-        print(f"Removed {result.deleted_count} movies with missing essential fields.")
-
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-    finally:
-        client.close()
-
-if __name__ == "__main__":
-    remove_duplicate_movies()
+movies = []
+for _, row in movies_data.iterrows():
+# Fetch detailed movie data using the fetch_movie_data function
+    print('processing: ', row)
+    try: 
+        movie_data = process_movies(row['title'], str(row['year']))
+        # Delete row after reading
+        movies_data = movies_data.drop(index=row)
+    except KeyError: 
+        print('error: ', row)
+   

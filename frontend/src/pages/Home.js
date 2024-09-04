@@ -16,11 +16,6 @@ function Home() {
   const promptScrollContainerRef = useRef(null);
   const popularMoviesScrollContainerRef = useRef(null);
 
-  useEffect(() => {
-    loadMovies();
-    loadPopularMovies(1);
-  }, []);
-
   const loadMovies = async () => {
     setLoading(true);
     try {
@@ -43,7 +38,7 @@ function Home() {
         console.log("Fetched popular movies:", data);
         
         const validMovies = data.filter(movie => {
-          const requiredFields = ['title', 'year', 'poster', 'director', 'plot'];
+          const requiredFields = ['title', 'year', 'poster', 'director', 'plot', 'rotten tomatoes'];
           return requiredFields.every(field => 
             movie[field] && movie[field] !== 'N/A' && movie[field] !== ''
           );
@@ -64,6 +59,11 @@ function Home() {
       setPopularMoviesLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadMovies();
+    loadPopularMovies(1);
+  }, []);
 
   const handlePromptSubmit = async (e) => {
     e.preventDefault();

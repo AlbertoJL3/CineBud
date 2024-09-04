@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { fetchMovies, submitPrompt } from '../utils/api';
+import React, { useState, useEffect } from 'react';
+import { fetchMovies } from '../utils/api';
 import Loading from '../components/Loading';
 import MovieCard from '../components/MovieCard';
 import '@fortawesome/fontawesome-free/css/all.min.css';

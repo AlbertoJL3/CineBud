@@ -95,7 +95,6 @@ def process_movies(title, year):
             return inserted_movie
         else: 
             return []
-                
 
 def insert_movie(movie_data):
     result = collection.insert_one(movie_data)
