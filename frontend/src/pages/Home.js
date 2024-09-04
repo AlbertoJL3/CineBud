@@ -175,7 +175,6 @@ function Home() {
             {popularMoviesLoading && (
               <div className="loading-animation">
                 <div className="spinner"></div>
-                <p>Loading more movies...</p>
               </div>
             )}
           </div>
