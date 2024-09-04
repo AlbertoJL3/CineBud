@@ -57,7 +57,6 @@
 }
 
 .nav-links {  
-  /* space out nav links evenly */
   color: white;
   display: flex;
   align-items: center;
@@ -67,7 +66,7 @@
 }
 
 .nav-links:hover {
-color: pink;
+  color: pink;
 }
 
 @media screen and (max-width: 768px) {

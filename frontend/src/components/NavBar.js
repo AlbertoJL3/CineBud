@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../utils/AuthContext'; // Import the useAuth hook
+import { useAuth } from '../utils/AuthContext';
 import '../styles/NavBar.css';
 
 function Navbar() {
-  const { user, logout } = useAuth(); // Use the useAuth hook to get user and logout function
-  const navigate = useNavigate(); // Use navigate for redirection after logout
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  // Handle logout
-  const handleLogout = async () => {
-    await logout(); // Call the logout function from AuthContext
-    navigate('/'); // Redirect to home page after logout
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    await logout();
+    navigate('/');
   };
 
   return (
@@ -37,12 +37,10 @@ function Navbar() {
           </li>
           <li className="nav-item">
             {user ? (
-              // If user is logged in, show Logout button
-              <button onClick={handleLogout} className="nav-links bebas-neue-regular">
+              <Link to="/" onClick={handleLogout} className="nav-links bebas-neue-regular">
                 Logout
-              </button>
+              </Link>
             ) : (
-              // If user is not logged in, show Login link
               <Link to="/login" className="nav-links bebas-neue-regular">
                 Login
               </Link>
