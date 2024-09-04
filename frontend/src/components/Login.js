@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '../utils/api';
+import { useAuth } from '../utils/AuthContext';
 import '../styles/Login.css';
 
 function Login() {
@@ -8,6 +9,7 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +18,7 @@ function Login() {
     try {
       const response = await loginUser(username, password);
       if (response.access_token) {
-        localStorage.setItem('token', response.access_token);
+        login(response);
         navigate('/');
       } else {
         setError('Login failed. Please check your credentials.');

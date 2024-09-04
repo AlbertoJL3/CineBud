@@ -1,129 +1,46 @@
+import axios from 'axios';
+
 const BASE_URL = 'http://localhost:5001';
 
-export const fetchMovies = async () => {
-  const response = await fetch(`${BASE_URL}/movies`);
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-};
+const axiosInstance = axios.create({
+  baseURL: BASE_URL,
+});
 
-export const addMovie = async (title, year) => {
-  const response = await fetch(`${BASE_URL}/movies`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ title, year }),
-  });
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-};
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-export const updateMovie = async (movieId, updateData) => {
-  const response = await fetch(`${BASE_URL}/movies/${movieId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(updateData),
-  });
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-};
+export const fetchMovies = () => axiosInstance.get('/movies').then(res => res.data);
 
-export const deleteMovie = async (movieId) => {
-  const response = await fetch(`${BASE_URL}/movies/${movieId}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-};
+export const addMovie = (title, year) => axiosInstance.post('/movies', { title, year }).then(res => res.data);
 
-export const submitPrompt = async (prompt) => {
+export const updateMovie = (movieId, updateData) => axiosInstance.put(`/movies/${movieId}`, updateData).then(res => res.data);
+
+export const deleteMovie = (movieId) => axiosInstance.delete(`/movies/${movieId}`).then(res => res.data);
+
+export const submitPrompt = (prompt) => {
   const formData = new FormData();
   formData.append('prompt', prompt);
-  
-  const response = await fetch(`${BASE_URL}/movie_results`, {
-    method: 'POST',
-    body: formData,
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to process prompt');
-  }
-
-  const data = await response.json();
-  return data;
+  return axiosInstance.post('/movie_results', formData).then(res => res.data);
 };
 
-export const getPopularMovies = async () => {
-  const response = await fetch(`${BASE_URL}/popular_movies`, {
-    method: 'GET'
-  });
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-}
-export const registerUser = async (username, email, password) => {
-  const response = await fetch(`${BASE_URL}/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ username, email, password }),
-  });
-  if (!response.ok) {
-    throw new Error('Registration failed');
-  }
-  return response.json();
-};
+export const getPopularMovies = () => axiosInstance.get('/popular_movies').then(res => res.data);
 
-export const loginUser = async (username, password) => {
-  const response = await fetch(`${BASE_URL}/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ username, password }),
-  });
-  if (!response.ok) {
-    throw new Error('Login failed');
-  }
-  return response.json();
-};
+export const registerUser = (username, email, password) => 
+  axios.post(`${BASE_URL}/register`, { username, email, password }).then(res => res.data);
 
-export const getUserProfile = async () => {
-  const response = await fetch(`${BASE_URL}/profile`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error('Failed to fetch profile');
-  }
-  return response.json();
-};
+export const loginUser = (username, password) => 
+  axios.post(`${BASE_URL}/login`, { username, password }).then(res => res.data);
 
-export const updateUserProfile = async (updateData) => {
-  const response = await fetch(`${BASE_URL}/profile`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-    },
-    body: JSON.stringify(updateData),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to update profile');
-  }
-  return response.json();
-};
+export const getUserProfile = () => axiosInstance.get('/profile').then(res => res.data);
+
+export const updateUserProfile = (updateData) => axiosInstance.put('/profile', updateData).then(res => res.data);
+
+export const logoutUser = () => axiosInstance.post('/logout').then(res => res.data);
