@@ -6,7 +6,10 @@ from flask import render_template
 import pandas as pd
 from backend import fetch_movie_data, get_chatgpt_response, handle_prompt, load_movies_from_json
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -18,7 +21,11 @@ def index():
     return render_template('index.html')
 
 # Setup the Flask-JWT-Extended extension
-app.config['JWT_SECRET_KEY'] = 'ronswansonrox12345'  # Change this!
+SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+if not SECRET_KEY:
+    raise ValueError("No JWT_SECRET_KEY set for JWT authentication")
+
+app.config['JWT_SECRET_KEY'] = SECRET_KEY
 jwt = JWTManager(app)
 
 @app.route('/register', methods=['POST'])
