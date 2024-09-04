@@ -123,7 +123,7 @@ def popular_movies():
 
         # Get pagination parameters from request
         page = int(request.args.get('page', 1))
-        per_page = int(request.args.get('per_page', 50))  # Default to 50 movies per page
+        per_page = int(request.args.get('per_page', 15))  # Default to 50 movies per page
 
         # Calculate start and end index for pagination
         start = (page - 1) * per_page

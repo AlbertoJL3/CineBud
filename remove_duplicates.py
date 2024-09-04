@@ -1,22 +1,24 @@
 import pandas as pd
 from backend.controllers import process_movies
 
-
-movies_data = pd.read_csv('popularity_movies.csv')
-# Remove duplicates and extract the year from the release_date
+# Load and clean the data
+movies_data = pd.read_csv('top_rated_movies.csv')
 movies_data = movies_data.drop_duplicates(subset=['title'])
 movies_data['year'] = pd.to_datetime(movies_data['release_date']).dt.year
 movies_data = movies_data[['title', 'year']]
-print(movies_data)
+
+# Calculate the total number of movies
+total_movies = len(movies_data)
+print(f"Total movies to process: {total_movies}")
 
 movies = []
-for _, row in movies_data.iterrows():
-# Fetch detailed movie data using the fetch_movie_data function
-    print('processing: ', row)
+# Iterate over the dataframe rows with a progress counter
+for idx, row in enumerate(movies_data.iterrows(), 1):
+    print(f"Processing {idx}/{total_movies} ({(idx / total_movies) * 100:.2f}%) - {row[1]['title']} ({row[1]['year']})")
     try: 
-        movie_data = process_movies(row['title'], str(row['year']))
-        # Delete row after reading
-        movies_data = movies_data.drop(index=row)
+        movie_data = process_movies(row[1]['title'], str(row[1]['year']))
+        movies.append(movie_data)
     except KeyError: 
-        print('error: ', row)
-   
+        print(f"Error processing: {row[1]['title']} ({row[1]['year']})")
+
+print("Processing complete.")
