@@ -32,7 +32,7 @@ def register_user(username, email, password):
         del new_user['password']  # Don't send password back to client
         return new_user, 201
     except PyMongoError as e:
-        print(f"An error occurred while registering the user: {str(e)}")
+        print(f"Username or email already exists: {str(e)}")
         return {'error': 'Registration failed'}, 500
     
 def login_user(user_input, password, is_email=False):
