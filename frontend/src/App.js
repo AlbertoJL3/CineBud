@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from '../src/utils/AuthContext';
 import Movies from './pages/Movies';
 import Home from './pages/Home';
 import Watchlist from './components/Watchlist';
@@ -12,22 +13,45 @@ import './styles/Movies.css';
 import './styles/Home.css';
 import GradientBackground from './components/styles/gradient';
 
-function App() {
+function PrivateRoute({ children }) {
+  const { user, loading } = useAuth();
+  
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
+  return user ? children : <Navigate to="/login" />;
+}
+
+function AppContent() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Router>
-      <GradientBackground>
-        <div className="App">
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/movies" element={<Movies />} />
-            <Route path="/watchlist" element={<Watchlist />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </div>
-      </GradientBackground>
+      <Navbar />
+      <Routes>
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+        <Route path="/register" element={user ? <Navigate to="/" /> : <Register />} />
+        <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+        <Route path="/movies" element={<PrivateRoute><Movies /></PrivateRoute>} />
+        <Route path="/watchlist" element={<PrivateRoute><Watchlist /></PrivateRoute>} />
+        <Route path="*" element={<Navigate to={user ? "/" : "/login"} />} />
+      </Routes>
     </Router>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <GradientBackground>
+        <AppContent />
+      </GradientBackground>
+    </AuthProvider>
   );
 }
 
