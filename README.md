@@ -5,6 +5,8 @@ CineBud is an AI-powered movie recommendation system that leverages ML/AI tools 
 ## Overview
 
 This project aims to build a sophisticated movie recommendation system that fetches movie data from the OMDb API, stores it in a MongoDB database, and uses AI to generate personalized movie recommendations. The system includes a React-based frontend for an intuitive user interface.
+## UI 
+![imagen](https://github.com/user-attachments/assets/62218823-4fde-4bab-bfb1-e54bcf2f76b5)
 
 ## Features
 
