@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { submitPrompt } from '../utils/api';
+import { submitPrompt, getWatchlist, addToWatchlist, removeFromWatchlist } from '../utils/api';
 import Loading from '../components/Loading';
 import MovieCard from '../components/MovieCard';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -13,6 +13,7 @@ function Home() {
   const [promptResults, setPromptResults] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [watchlist, setWatchlist] = useState([]);
   const promptScrollContainerRef = useRef(null);
   const popularMoviesScrollContainerRef = useRef(null);
   const loadingRef = useRef(false);
@@ -51,7 +52,31 @@ function Home() {
 
   useEffect(() => {
     loadPopularMovies(1);
+    loadWatchlist();
   }, [loadPopularMovies]);
+
+  const loadWatchlist = async () => {
+    try {
+      const watchlistData = await getWatchlist();
+      setWatchlist(watchlistData);
+    } catch (err) {
+      console.error('Failed to load watchlist:', err);
+    }
+  };
+
+  const handleWatchlistChange = async (movieId, isAdding) => {
+    try {
+      if (isAdding) {
+        await addToWatchlist(movieId);
+        setWatchlist(prev => [...prev, { _id: movieId }]);
+      } else {
+        await removeFromWatchlist(movieId);
+        setWatchlist(prev => prev.filter(m => m._id !== movieId));
+      }
+    } catch (err) {
+      console.error('Failed to update watchlist:', err);
+    }
+  };
 
   const handlePromptSubmit = async (e) => {
     e.preventDefault();
@@ -143,7 +168,11 @@ function Home() {
             <div className="prompt-results-container" ref={promptScrollContainerRef}>
               {promptResults.map((movie) => (
                 <div className="movie-card-wrapper" key={movie.id}>
-                  <MovieCard movie={movie} />
+                  <MovieCard 
+                    movie={movie} 
+                    isInWatchlist={watchlist.some(w => w._id === movie._id)}
+                    onWatchlistChange={handleWatchlistChange}
+                  />
                 </div>
               ))}
             </div>
@@ -167,7 +196,11 @@ function Home() {
           <div className="prompt-results-container" ref={popularMoviesScrollContainerRef}>
             {popularMovies.map((movie) => (
               <div className="movie-card-wrapper" key={movie.id}>
-                <MovieCard movie={movie} />
+                <MovieCard 
+                  movie={movie} 
+                  isInWatchlist={watchlist.some(w => w._id === movie._id)}
+                  onWatchlistChange={handleWatchlistChange}
+                />
               </div>
             ))}
             {popularMoviesLoading && (

@@ -4,6 +4,16 @@
     padding: 20px;
   }
   
+
+  .watchlist-header {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color:white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    }
+
   .watchlist-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

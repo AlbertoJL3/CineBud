@@ -153,7 +153,7 @@ def popular_movies():
         movies = []
         for _, row in movies_data.iloc[start:end].iterrows():
             # Fetch detailed movie data using the fetch_movie_data function
-            movie_data = fetch_movie_data(row['title'], str(row['year']))
+            movie_data = process_movies(row['title'], str(row['year']))
             if movie_data:
                 movies.append(movie_data)
         

@@ -3,6 +3,7 @@ import MovieCard from '../components/MovieCard';
 import { getWatchlist, removeFromWatchlist } from '../utils/api';
 import '../styles/Watchlist.css';
 
+
 function Watchlist() {
   const [watchlist, setWatchlist] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +39,8 @@ function Watchlist() {
 
   return (
     <div className="watchlist-container">
-      <h2 styles="color: white;">My Watchlist</h2>
+      
+      <h2 className="watchlist-header">Your Watchlist</h2>
       {watchlist.length === 0 ? (
         <p>Your watchlist is empty. Start adding movies!</p>
       ) : (

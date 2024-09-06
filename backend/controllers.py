@@ -165,7 +165,9 @@ def add_to_watchlist(movie_id):
     try:
         current_user_id = get_jwt_identity()
         movie_object_id = ObjectId(movie_id)
-        print(movie_id)
+        print('Movie Object ID: ', movie_object_id)
+        print('Movie  ID: ', movie_id)
+
         # First, check if the movie exists in the movies collection
         movie = collection.find_one({'_id': movie_object_id})
         if not movie:
