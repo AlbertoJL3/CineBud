@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from '../src/utils/AuthContext';
 import Movies from './pages/Movies';
 import Home from './pages/Home';
-import Watchlist from './components/Watchlist';
+import Watchlist from './pages/Watchlist';
 import Login from './components/Login';
 import Register from './components/Register';
 import Navbar from './components/NavBar';

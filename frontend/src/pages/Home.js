@@ -25,7 +25,6 @@ function Home() {
       const response = await fetch(`http://localhost:5001/popular-movies?page=${pageNum}&per_page=15`);
       if (response.ok) {
         const data = await response.json();
-        console.log("Fetched popular movies:", data);
         if (data.length === 0) {
           setHasMore(false);
         } else {
@@ -61,7 +60,6 @@ function Home() {
     setError(null);
     try {
       const results = await submitPrompt(prompt);
-      console.log("Prompt results:", results);
       setPromptResults(results);
       setPrompt('');
       setTimeout(() => {
@@ -168,7 +166,7 @@ function Home() {
           </button>
           <div className="prompt-results-container" ref={popularMoviesScrollContainerRef}>
             {popularMovies.map((movie) => (
-              <div className="movie-card-wrapper" key={movie.id || movie.title}>
+              <div className="movie-card-wrapper" key={movie.id}>
                 <MovieCard movie={movie} />
               </div>
             ))}

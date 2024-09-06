@@ -1,13 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { addToWatchlist, removeFromWatchlist } from '../utils/api';
 import '../styles/MovieCard.css';
 
-function MovieCard({ movie }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+function MovieCard({ movie, isInWatchlist, onWatchlistChange }) {
+  const [expanded, setExpanded] = useState(false);
+  const [localIsInWatchlist, setLocalIsInWatchlist] = useState(isInWatchlist);
   const maxLength = 100;
+
+  useEffect(() => {
+    setLocalIsInWatchlist(isInWatchlist);
+  }, [isInWatchlist]);
 
   const toggleReadMore = (e) => {
     e.stopPropagation();
-    setIsExpanded(!isExpanded);
+    setExpanded(!expanded);
+  };
+
+  const toggleWatchlist = async (e) => {
+    e.stopPropagation();
+    try {
+      if (localIsInWatchlist) {
+        await removeFromWatchlist(movie._id);
+      } else {
+        await addToWatchlist(movie._id);
+      }
+      setLocalIsInWatchlist(!localIsInWatchlist);
+      onWatchlistChange(movie._id, !localIsInWatchlist);
+    } catch (error) {
+      console.error('Error toggling watchlist:', error);
+    }
   };
 
   const truncatedPlot = movie.plot.length > maxLength 
@@ -16,6 +37,13 @@ function MovieCard({ movie }) {
 
   return (
     <div className="movie-card">
+      <div className="watchlist-button" onClick={toggleWatchlist}>
+        {localIsInWatchlist ? (
+          <span className="checkmark">✓</span>
+        ) : (
+          <span className="plus-sign">+</span>
+        )}
+      </div>
       <img src={movie.poster} alt={`${movie.title} poster`} className="movie-poster" />
       <div className="movie-info">
         <h3>{movie.title}</h3>
@@ -42,10 +70,10 @@ function MovieCard({ movie }) {
         <div className="plot-container">
           <p>
             <span className="movie-details-label">Plot: </span>
-            {isExpanded ? movie.plot : truncatedPlot}
+            {expanded ? movie.plot : truncatedPlot}
             {movie.plot.length > maxLength && (
               <button onClick={toggleReadMore} className="read-more-btn">
-                {isExpanded ? 'Read Less' : 'Read More'}
+                {expanded ? 'Read Less' : 'Read More'}
               </button>
             )}
           </p>

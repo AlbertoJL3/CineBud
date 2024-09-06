@@ -44,3 +44,9 @@ export const getUserProfile = () => axiosInstance.get('/profile').then(res => re
 export const updateUserProfile = (updateData) => axiosInstance.put('/profile', updateData).then(res => res.data);
 
 export const logoutUser = () => axiosInstance.post('/logout').then(res => res.data);
+
+export const addToWatchlist = (movieId) => axiosInstance.post('/watchlist', { movieId }).then(res => res.data);
+
+export const removeFromWatchlist = (movieId) => axiosInstance.delete(`/watchlist/${movieId}`).then(res => res.data);
+
+export const getWatchlist = () => axiosInstance.get('/watchlist').then(res => res.data);

@@ -6,8 +6,11 @@ from flask import render_template
 import pandas as pd
 from backend import fetch_movie_data, get_chatgpt_response, handle_prompt, load_movies_from_json
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+from backend.controllers import get_watchlist, add_to_watchlist, remove_from_watchlist
 import os
 from dotenv import load_dotenv
+import bson.errors as bson_errors
+from bson import ObjectId
 
 load_dotenv()
 
@@ -153,11 +156,36 @@ def popular_movies():
             movie_data = fetch_movie_data(row['title'], str(row['year']))
             if movie_data:
                 movies.append(movie_data)
-
+        
         return jsonify(movies)
     except Exception as e:
         print(e)
         return jsonify({'error': 'An error occurred processing the request'}), 500
+
+@app.route('/watchlist', methods=['GET'])
+@jwt_required()
+def get_user_watchlist():
+    return get_watchlist()
+
+@app.route('/watchlist', methods=['POST'])
+@jwt_required()
+def add_movie_to_watchlist():
+    movie_id = request.json.get('movieId')
+    try:
+        ObjectId(movie_id)  # Validate the movie_id
+    except bson_errors.InvalidId:
+        return jsonify({'error': 'Invalid movie ID'}), 400
+    return add_to_watchlist(movie_id)
+
+@app.route('/watchlist/<movie_id>', methods=['DELETE'])
+@jwt_required()
+def remove_movie_from_watchlist(movie_id):
+    try:
+        ObjectId(movie_id)  # Validate the movie_id
+    except bson_errors.InvalidId:
+        return jsonify({'error': 'Invalid movie ID'}), 400
+    return remove_from_watchlist(movie_id)
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)  # Change port if needed

@@ -4,9 +4,10 @@ from pymongo.errors import PyMongoError
 from config import MONGO_URI
 from backend.movie_services import fetch_movie_data
 import certifi
-import certifi
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from bson import ObjectId
+
 try:
     client = MongoClient(MONGO_URI, server_api=ServerApi('1'), tlsCAFile=certifi.where())
     db = client['moviesdb']
@@ -14,6 +15,7 @@ try:
     users_collection = db['users']
 except PyMongoError as e:
     print(f"Failed to connect to the database: {str(e)}")
+
 
 def register_user(username, email, password):
     try:
@@ -140,3 +142,63 @@ def delete_movie(movie_id):
     except PyMongoError as e:
         print(f"An error occurred while deleting the movie: {str(e)}")
         return 0
+    
+@jwt_required()
+def get_watchlist():
+    try:
+        current_user_id = get_jwt_identity()
+        user = users_collection.find_one({'_id': ObjectId(current_user_id)})
+        if user and 'watchlist' in user:
+            watchlist_ids = [ObjectId(movie_id) for movie_id in user['watchlist']]
+            watchlist_movies = list(collection.find({'_id': {'$in': watchlist_ids}}))
+            for movie in watchlist_movies:
+                movie['_id'] = str(movie['_id'])
+            return watchlist_movies, 200
+        else:
+            return [], 200
+    except PyMongoError as e:
+        print(f"An error occurred while fetching watchlist: {str(e)}")
+        return {'error': 'Failed to fetch watchlist'}, 500
+
+@jwt_required()
+def add_to_watchlist(movie_id):
+    try:
+        current_user_id = get_jwt_identity()
+        movie_object_id = ObjectId(movie_id)
+        print(movie_id)
+        # First, check if the movie exists in the movies collection
+        movie = collection.find_one({'_id': movie_object_id})
+        if not movie:
+            return {'error': 'Movie not found'}, 404
+
+        # Then, update the user's watchlist
+        result = users_collection.update_one(
+            {'_id': ObjectId(current_user_id)},
+            {'$addToSet': {'watchlist': str(movie_object_id)}}
+        )
+        
+        if result.modified_count:
+            # Fetch the updated user document
+            updated_user = users_collection.find_one({'_id': ObjectId(current_user_id)})
+            return {'message': 'Movie added to watchlist', 'watchlist': updated_user.get('watchlist', [])}, 200
+        else:
+            return {'message': 'Movie already in watchlist'}, 200
+    except PyMongoError as e:
+        print(f"An error occurred while adding to watchlist: {str(e)}")
+        return {'error': 'Failed to add movie to watchlist'}, 500
+
+@jwt_required()
+def remove_from_watchlist(movie_id):
+    try:
+        current_user_id = get_jwt_identity()
+        result = users_collection.update_one(
+            {'_id': ObjectId(current_user_id)},
+            {'$pull': {'watchlist': str(movie_id)}}
+        )
+        if result.modified_count:
+            return {'message': 'Movie removed from watchlist'}, 200
+        else:
+            return {'message': 'Movie not in watchlist'}, 200
+    except PyMongoError as e:
+        print(f"An error occurred while removing from watchlist: {str(e)}")
+        return {'error': 'Failed to remove movie from watchlist'}, 500
