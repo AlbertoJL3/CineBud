@@ -27,7 +27,7 @@ function Navbar() {
           </li>
           <li className="nav-item">
             <Link to="/movies" className="nav-links bebas-neue-regular">
-              All Movies
+              Explore
             </Link>
           </li>
           <li className="nav-item">

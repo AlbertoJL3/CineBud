@@ -14,3 +14,10 @@ hypercorn
 unidecode
 flask-jwt-extended 
 passlib
+bson
+certifi
+werkzeug
+flask_pymongo
+flask_cors
+flask_jwt_extended
+flask_bcrypt

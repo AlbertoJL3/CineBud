@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchMovies, getWatchlist, addToWatchlist, removeFromWatchlist } from '../utils/api';
 import Loading from '../components/Loading';
+import '../styles/Movies.css';
 import MovieCard from '../components/MovieCard';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 

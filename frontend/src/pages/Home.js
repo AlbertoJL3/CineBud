@@ -3,6 +3,7 @@ import { submitPrompt, getWatchlist, addToWatchlist, removeFromWatchlist } from 
 import Loading from '../components/Loading';
 import MovieCard from '../components/MovieCard';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import '../styles/Home.css';
 
 function Home() {
   const [popularMovies, setPopularMovies] = useState([]);
@@ -222,7 +223,9 @@ function Home() {
         </div>
       </div>
     </div>
+    
   );
+  
 }
 
 export default Home;

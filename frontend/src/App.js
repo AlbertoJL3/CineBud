@@ -7,10 +7,6 @@ import Watchlist from './pages/Watchlist';
 import Login from './components/Login';
 import Register from './components/Register';
 import Navbar from './components/NavBar';
-import './styles/MovieList.css';
-import './styles/MovieCard.css';
-import './styles/Movies.css';
-import './styles/Home.css';
 import GradientBackground from './components/styles/gradient';
 
 function PrivateRoute({ children }) {

@@ -1,15 +1,7 @@
 /* src/styles/GradientBackground.css */
 
 .gradient-background {
-    background: linear-gradient(
-      135deg,
-      #ff0000,
-      #653376,
-      #ff4500,
-      #4b0082,
-      #ff4500,
-      #ffffff
-    );
+    background: black;
     background-size: 400% 400%;
     animation: gradientAnimation 40s ease infinite;
     min-height: 100vh;

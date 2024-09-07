@@ -1,52 +1,30 @@
 .login-container {
   max-width: 400px;
+  width: 100%;
   margin: 50px auto;
-  padding: 20px;
+  padding: 10px;
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
 }
 
 .login-container h2 {
+  max-width: 400px;
   text-align: center;
   color: #ffffff;
   margin-bottom: 20px;
   font-family: 'Bebas Neue', sans-serif;
 }
 
-.form-group {
-  margin-bottom: 15px;
-  padding: 0 30px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  color: #ffffff;
-  font-family: 'Arial', sans-serif;
-}
-
-.form-group input {
+.login-button[type="submit"], .register-button {
+  max-width: 400px;
   width: 100%;
-  padding: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  font-size: 16px;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #ffffff;
-}
-
-button[type="submit"], .register-button {
-  width: 100%;
+  margin: 10px;
+  margin-top: 20px;
   padding: 10px;
   color: #ffffff;
-  border: none;
+  border: none; 
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
@@ -54,7 +32,7 @@ button[type="submit"], .register-button {
   font-family: 'Bebas Neue', sans-serif;
 }
 
-button[type="submit"] {
+.login-button[type="submit"] {
   background-color: #e50914;
   margin-bottom: 10px;
 }
@@ -63,14 +41,13 @@ button[type="submit"] {
   background-color: rgba(229, 9, 20, 0.7);
 }
 
-button[type="submit"]:hover, .register-button:hover {
-  background-color: #f40612;
+.login-button[type="submit"]:hover, .register-button:hover {
+  background-color: gray;
 }
 
 @media (max-width: 480px) {
   .login-container {
     max-width: 90%;
-    margin: 20px auto;
   }
 }
 
