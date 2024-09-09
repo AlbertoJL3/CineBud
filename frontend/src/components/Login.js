@@ -8,11 +8,13 @@ function Login() {
   const [userInput, setUserInput] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     setError('');
 
     try {
@@ -29,6 +31,8 @@ function Login() {
     } catch (error) {
       setError('An error occurred. Please try again.');
       console.error('Login error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,9 +60,14 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button type="submit" className="login-button">Login</button>
         </div>
-        
+        <button type="submit" className="login-button" disabled={loading}>
+          {loading ? (
+            <div className="loading-spinner"></div>
+          ) : (
+            'Login'
+          )}
+        </button>
       </form>
       <p>
         Don't have an account? <Link to="/register">Register here</Link>

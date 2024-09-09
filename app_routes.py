@@ -201,5 +201,36 @@ def remove_movie_from_watchlist(movie_id):
         return jsonify({'error': 'Invalid movie ID'}), 400
     return remove_from_watchlist(movie_id)
 
+@app.route('/top-rated-movies', methods=['GET'])
+@jwt_required()
+def top_rated_movies():
+    try:
+        # Read the CSV file
+        movies_data = pd.read_csv('top_rated_movies.csv')
+        
+        # Remove duplicates and extract the year from the release_date
+        movies_data = movies_data.drop_duplicates(subset=['title'])
+        movies_data['year'] = pd.to_datetime(movies_data['release_date']).dt.year
+
+        # Get pagination parameters from request
+        page = int(request.args.get('page', 1))
+        per_page = int(request.args.get('per_page', 15))  # Default to 15 movies per page
+
+        # Calculate start and end index for pagination
+        start = (page - 1) * per_page
+        end = start + per_page
+
+        movies = []
+        for _, row in movies_data.iloc[start:end].iterrows():
+            # Fetch detailed movie data using the process_movies function
+            movie_data = process_movies(row['title'], str(row['year']))
+            if movie_data:
+                movies.append(movie_data)
+        
+        return jsonify(movies)
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'An error occurred processing the request'}), 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

@@ -1,79 +1,158 @@
-  .movies-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: black;
+.movies-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 92.5vh;
+  min-width: 100%;
+  overflow-x: hidden;
+  color: white;
+  background: black;
+  font-size: 13px;
+}
+
+.movies-page h2 {
+  color: white;
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.movie-card-wrapper {
+  flex: 0 0 auto;
+  margin-right: 20px;
+  width: 200px;
+}
+
+.prompt-results-wrapper {
+  position: relative;
+  margin: 20px 0;
+  padding: 0 50px;
+  width: 100%;
+  max-width: 1200px;
+  color: white;
+}
+
+.prompt-results-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  outline: none;
+  padding: 20px 0;
+  min-height: 400px;
+}
+
+.prompt-results-container::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-container {
+  position: relative;
+  overflow: hidden;
+  padding: 0 50px;
+}
+
+.scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: black;
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 10;
+}
+
+.scroll-button:hover {
+  background: rgb(255, 0, 0);
+}
+
+.scroll-button.left {
+  left: 0px;
+}
+
+.scroll-button.right {
+  right: 0px;
+}
+
+.scroll-button i {
+  color: white;
+  font-size: 20px;
+}
+
+.loading-animation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 200px;
+  height: 300px;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top: 4px solid #ffffff;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error {
+  color: red;
+  margin-top: 20px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .scroll-container {
+    padding: 0 40px;
+  }
+  
+  .prompt-results-wrapper {
+    padding: 0 30px;
   }
 
-  .movie-card-wrapper {
-    flex: 0 0 auto;
-    margin-right: 20px;
-    width: 200px;
-  }
-  
-  .movie-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
-    width: 100%;
-    max-width: 1200px;
-    border-radius: 20px;
-  }
-  
-  .movies-page h1 {
-    color: white;
-  }
-  
-  .error {
-    color: red;
-    margin-top: 20px;
-  }
-  
-  @media (max-width: 768px) {
-    .prompt-results-wrapper {
-      padding: 0 30px;
-    }
-  
-    .scroll-button {
-      width: 30px;
-      height: 30px;
-    }
-  
-    .scroll-button i {
-      font-size: 16px;
-    }
-  }
-  
-  .tab-buttons {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .tab-buttons button {
-    padding: 10px 20px;
-    margin: 0 10px;
-    border: none;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    border-radius: 20px;
-  }
-  
-  .tab-buttons button.active {
-    background-color: rgba(255, 255, 255, 0.3);
+  .scroll-button {
+    width: 30px;
+    height: 30px;
   }
 
-  .loading-animation {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+  .scroll-button i {
+    font-size: 16px;
   }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 20px;
+}
+
+.tab-buttons button.active {
+  background-color: rgba(255, 255, 255, 0.3);
+}

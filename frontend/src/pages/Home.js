@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { submitPrompt, getPopularMovies, getWatchlist, addToWatchlist, removeFromWatchlist, refreshToken } from '../utils/api';
+import { submitPrompt, getPopularMovies, getTopRatedMovies, getWatchlist, addToWatchlist, removeFromWatchlist, refreshToken } from '../utils/api';
 import { useAuth } from '../utils/AuthContext';
 import Loading from '../components/Loading';
 import MovieCard from '../components/MovieCard';

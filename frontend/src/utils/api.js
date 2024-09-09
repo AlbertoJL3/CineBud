@@ -82,3 +82,6 @@ export const refreshToken = () => {
     return res.data;
   });
 };
+
+export const getTopRatedMovies = (page = 1, perPage = 15) => 
+  axiosInstance.get(`/top-rated-movies?page=${page}&per_page=${perPage}`).then(res => res.data);
