@@ -51,6 +51,7 @@
 
 .movie-card:hover {
   transform: translateY(-3px) scale(1.03);
+  
 }
 
 .movie-poster {
@@ -106,6 +107,7 @@
 }
 
 .movie-details h3 {
+  padding: 10px 0px;
   margin: 0 0 5px 0;
   font-size: 1.2em;
   text-align: left; /* Ensure the title is also left-aligned */
@@ -140,11 +142,7 @@
 
 .movie-card:hover .movie-details {
   opacity: 1;
-  background: linear-gradient(
-    135deg,
-    black,
-    rgba(255, 0, 0, 0.8)
-  )
+  background: black;
 }
 
 /* Adjust the plot container if needed */

@@ -93,6 +93,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  left: 42%;
   min-width: 200px;
   height: 300px;
 }

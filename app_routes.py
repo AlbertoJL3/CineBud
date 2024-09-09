@@ -151,7 +151,7 @@ def movie_results():
 def popular_movies():
     try:
         # Read the CSV file
-        movies_data = pd.read_csv('popularity_movies.csv')
+        movies_data = pd.read_csv(r'backend/curation/data/popularity_movies.csv')
         
         # Remove duplicates and extract the year from the release_date
         movies_data = movies_data.drop_duplicates(subset=['title'])
@@ -206,7 +206,7 @@ def remove_movie_from_watchlist(movie_id):
 def top_rated_movies():
     try:
         # Read the CSV file
-        movies_data = pd.read_csv('top_rated_movies.csv')
+        movies_data = pd.read_csv('backend/curation/data/top_rated_movies.csv')
         
         # Remove duplicates and extract the year from the release_date
         movies_data = movies_data.drop_duplicates(subset=['title'])

@@ -29,7 +29,7 @@
   align-items: center;
   width: 100%;
   max-width: 1500px;
-  padding: 0 20px;
+  padding: 10px 20px;
 }
 
 .navbar-logo {
@@ -48,6 +48,7 @@
   list-style: none;
   text-align: center;
   margin-right: -22px;
+  padding-bottom: 10px;
 }
 
 .nav-item {

@@ -1,8 +1,7 @@
 .watchlist-container {
-    margin: 0 auto;
-    padding: 20px;
     align-items: center;
     justify-content: center;
+    width: 100%;
     background: linear-gradient(
     0deg,
     rgba(79, 9, 9, 0.8) 0%,
@@ -10,11 +9,13 @@
     rgba(84, 36, 36, 0.8) 75%,
     rgba(255, 0, 0, 0.8) 100%
   );
-  }
+  margin-top: 0;
+  padding-top: 0;  
+}
   .watchlist-header {
     font-size: 1.5rem;
-    margin-bottom: 20px;
     color:white;
+    padding: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
@@ -23,7 +24,7 @@
   .watchlist-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
+    gap: 10px;
   }
   
   .watchlist-item {
@@ -45,4 +46,109 @@
   
   .remove-button:hover {
     background-color: #ff3333;
+  }
+  .watchlist-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 92.5vh;
+    min-width: 100%;
+    overflow-x: hidden;
+    color: white;
+    font-size: 13px;
+    padding: 0 20px;
+  }
+  
+  .watchlist-header {
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    margin-top: 0;
+  }
+  
+  .prompt-results-wrapper {
+    position: relative;
+    margin: 0px 0;
+    padding: 0 0px;
+    width: 100%;
+    max-width: 1200px;
+    color: white;
+  }
+  
+  .prompt-results-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    outline: none;
+    padding: 0px 0;
+    min-height: 400px;
+  }
+  
+  .prompt-results-container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .movie-card-wrapper {
+    flex: 0 0 auto;
+    margin-right: 20px;
+    width: 200px;
+  }
+  
+  .scroll-container {
+    position: relative;
+    overflow: hidden;
+    padding: 0 50px;
+  }
+  
+  .scroll-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 10;
+  }
+  
+  .scroll-button:hover {
+    background: rgba(255, 0, 0, 0.7);
+  }
+  
+  .scroll-button.left {
+    left: 10px;
+  }
+  
+  .scroll-button.right {
+    right: 10px;
+  }
+  
+  .error {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .prompt-results-wrapper {
+      padding: 0 30px;
+    }
+  
+    .scroll-button {
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+    }
   }

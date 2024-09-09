@@ -20,7 +20,7 @@
   color: white;
   text-align: center;
   font-size: 18px;
-  padding: 0;
+  padding: 20px;
   margin: 0;
 }
 
@@ -172,7 +172,6 @@
 }
 
 
-/* Loading and Error Styles */
 .loading {
   display: flex;
   justify-content: center;
