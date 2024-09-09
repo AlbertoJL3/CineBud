@@ -5,12 +5,13 @@ from backend import register_user, login_user, get_user_profile, update_user_pro
 from flask import render_template
 import pandas as pd
 from backend import fetch_movie_data, get_chatgpt_response, handle_prompt, load_movies_from_json
-from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token, create_refresh_token
 from backend.controllers import get_watchlist, add_to_watchlist, remove_from_watchlist
 import os
 from dotenv import load_dotenv
 import bson.errors as bson_errors
 from bson import ObjectId
+from datetime import timedelta
 
 load_dotenv()
 
@@ -29,6 +30,8 @@ if not SECRET_KEY:
     raise ValueError("No JWT_SECRET_KEY set for JWT authentication")
 
 app.config['JWT_SECRET_KEY'] = SECRET_KEY
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
+app.config['JWT_REFRESH_TOKEN_EXPIRES'] = timedelta(days=30)
 jwt = JWTManager(app)
 
 @app.route('/register', methods=['POST'])
@@ -48,11 +51,21 @@ def login():
 
     if status_code != 200:
         # If login with username failed, try with email
-        # You might need to create a new function `login_user_by_email` in controllers.py
-        # or modify the existing `login_user` function to handle both cases
         result, status_code = login_user(user_input, password, is_email=True)
 
+    if status_code == 200:
+        # Create access token using the user_id from the result
+        access_token = create_access_token(identity=result['user_id'])
+        result['access_token'] = access_token
+
     return jsonify(result), status_code
+
+@app.route('/refresh-token', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh():
+    current_user = get_jwt_identity()
+    new_access_token = create_access_token(identity=current_user)
+    return jsonify(access_token=new_access_token), 200
 
 @app.route('/profile', methods=['GET'])
 @jwt_required()
@@ -68,6 +81,7 @@ def update_profile():
     return jsonify(result), status_code
 
 @app.route('/movies', methods=['POST'])
+@jwt_required()
 def add_movie():
     movie_title = request.json['title']
     movie_data = fetch_movie_data(movie_title)
@@ -77,6 +91,7 @@ def add_movie():
     return jsonify({'error': 'Movie not found'}), 404
 
 @app.route('/movies/<movie_id>', methods=['GET'])
+@jwt_required()
 def get_movie_by_id(movie_id):
     movie = get_movie(movie_id)
     if movie:
@@ -84,12 +99,13 @@ def get_movie_by_id(movie_id):
     return jsonify({'error': 'Movie not found'}), 404
 
 @app.route('/movies', methods=['GET'])
+@jwt_required()
 def get_movies():
-    # Get all movies
     movies = get_all_movies()
     return jsonify(movies)
 
 @app.route('/movies/<movie_id>', methods=['PUT'])
+@jwt_required()
 def update_movie_by_id(movie_id):
     update_data = request.json
     updated = update_movie(movie_id, update_data)
@@ -98,6 +114,7 @@ def update_movie_by_id(movie_id):
     return jsonify({'error': 'Movie not found'}), 404
 
 @app.route('/movies/<movie_id>', methods=['DELETE'])
+@jwt_required()
 def delete_movie_by_id(movie_id):
     deleted = delete_movie(movie_id)
     if deleted:
@@ -105,17 +122,14 @@ def delete_movie_by_id(movie_id):
     return jsonify({'error': 'Movie not found'}), 404
 
 @app.route('/movie_results', methods=['POST'])
+@jwt_required()
 def movie_results():
     prompt = request.form['prompt']
     
-    # Handle the prompt and write to JSON
     handle_prompt(prompt)
     movies = []
-    # Load the movies from the csv file
     try:
         movies_data = pd.read_csv('movies.csv')
-
-        # Remove duplicates from movies.csv
         movies_data = movies_data.drop_duplicates(subset=['title'])
         print(movies_data)
         for _, row in movies_data.iterrows():
@@ -126,13 +140,14 @@ def movie_results():
         for sublist in movies:
             if isinstance(sublist, list):
                 flattened_movies.extend(movie for movie in sublist if movie)
-            elif sublist:  # If it's not a list but still a truthy value
+            elif sublist:
                 flattened_movies.append(sublist)
         return flattened_movies
     except Exception as e:
         print(e)
 
 @app.route('/popular-movies', methods=['GET'])
+@jwt_required()
 def popular_movies():
     try:
         # Read the CSV file
@@ -144,7 +159,7 @@ def popular_movies():
 
         # Get pagination parameters from request
         page = int(request.args.get('page', 1))
-        per_page = int(request.args.get('per_page', 15))  # Default to 50 movies per page
+        per_page = int(request.args.get('per_page', 15))  # Default to 15 movies per page
 
         # Calculate start and end index for pagination
         start = (page - 1) * per_page
@@ -172,7 +187,7 @@ def get_user_watchlist():
 def add_movie_to_watchlist():
     movie_id = request.json.get('movieId')
     try:
-        ObjectId(movie_id)  # Validate the movie_id
+        ObjectId(movie_id)
     except bson_errors.InvalidId:
         return jsonify({'error': 'Invalid movie ID'}), 400
     return add_to_watchlist(movie_id)
@@ -181,11 +196,10 @@ def add_movie_to_watchlist():
 @jwt_required()
 def remove_movie_from_watchlist(movie_id):
     try:
-        ObjectId(movie_id)  # Validate the movie_id
+        ObjectId(movie_id)
     except bson_errors.InvalidId:
         return jsonify({'error': 'Invalid movie ID'}), 400
     return remove_from_watchlist(movie_id)
 
-
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)  # Change port if needed
+    app.run(debug=True, port=5001)

@@ -17,6 +17,29 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const refreshToken = localStorage.getItem('refreshToken');
+        const response = await axios.post(`${BASE_URL}/refresh-token`, { refreshToken });
+        const { access_token } = response.data;
+        localStorage.setItem('token', access_token);
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+        return axiosInstance(originalRequest);
+      } catch (refreshError) {
+        console.error('Error refreshing token:', refreshError);
+        // Logout user or handle refresh token failure
+        return Promise.reject(refreshError);
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const fetchMovies = () => axiosInstance.get('/movies').then(res => res.data);
 
 export const addMovie = (title, year) => axiosInstance.post('/movies', { title, year }).then(res => res.data);
@@ -31,7 +54,8 @@ export const submitPrompt = (prompt) => {
   return axiosInstance.post('/movie_results', formData).then(res => res.data);
 };
 
-export const getPopularMovies = () => axiosInstance.get('/popular_movies').then(res => res.data);
+export const getPopularMovies = (page = 1, perPage = 15) => 
+  axiosInstance.get(`/popular-movies?page=${page}&per_page=${perPage}`).then(res => res.data);
 
 export const registerUser = (username, email, password) => 
   axios.post(`${BASE_URL}/register`, { username: username.toLowerCase(), email: email.toLowerCase(), password }).then(res => res.data);
@@ -50,3 +74,11 @@ export const addToWatchlist = (movieId) => axiosInstance.post('/watchlist', { mo
 export const removeFromWatchlist = (movieId) => axiosInstance.delete(`/watchlist/${movieId}`).then(res => res.data);
 
 export const getWatchlist = () => axiosInstance.get('/watchlist').then(res => res.data);
+
+export const refreshToken = () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  return axios.post(`${BASE_URL}/refresh-token`, { refreshToken }).then(res => {
+    localStorage.setItem('token', res.data.access_token);
+    return res.data;
+  });
+};

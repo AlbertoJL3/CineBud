@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { submitPrompt, getWatchlist, addToWatchlist, removeFromWatchlist } from '../utils/api';
+import { submitPrompt, getPopularMovies, getWatchlist, addToWatchlist, removeFromWatchlist, refreshToken } from '../utils/api';
+import { useAuth } from '../utils/AuthContext';
 import Loading from '../components/Loading';
 import MovieCard from '../components/MovieCard';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -18,43 +19,50 @@ function Home() {
   const promptScrollContainerRef = useRef(null);
   const popularMoviesScrollContainerRef = useRef(null);
   const loadingRef = useRef(false);
+  const { user, logout } = useAuth();
 
   const loadPopularMovies = useCallback(async (pageNum) => {
     if (loadingRef.current || !hasMore) return;
     loadingRef.current = true;
     setPopularMoviesLoading(true);
     try {
-      const response = await fetch(`http://localhost:5001/popular-movies?page=${pageNum}&per_page=15`);
-      if (response.ok) {
-        const data = await response.json();
-        if (data.length === 0) {
-          setHasMore(false);
-        } else {
-          setPopularMovies(prevMovies => {
-            const newMovies = [...prevMovies, ...data];
-            return newMovies.filter((movie, index, self) =>
-              index === self.findIndex((t) => t.id === movie.id)
-            );
-          });
-          setPage(pageNum);
-        }
-      } else {
-        console.error('Failed to fetch popular movies:', response.statusText);
+      const data = await getPopularMovies(pageNum);
+      if (data.length === 0) {
         setHasMore(false);
+      } else {
+        setPopularMovies(prevMovies => {
+          const newMovies = [...prevMovies, ...data];
+          return newMovies.filter((movie, index, self) =>
+            index === self.findIndex((t) => t.id === movie.id)
+          );
+        });
+        setPage(pageNum);
       }
     } catch (err) {
-      console.error('Error fetching popular movies:', err);
+      console.error('Failed to fetch popular movies:', err);
+      if (err.response && err.response.status === 401) {
+        try {
+          await refreshToken();
+          // Retry loading popular movies after refreshing token
+          await loadPopularMovies(pageNum);
+        } catch (refreshError) {
+          console.error('Token refresh failed:', refreshError);
+          logout();  // Force logout if token refresh fails
+        }
+      }
       setHasMore(false);
     } finally {
       setPopularMoviesLoading(false);
       loadingRef.current = false;
     }
-  }, [hasMore]);
+  }, [hasMore, logout]);
 
   useEffect(() => {
-    loadPopularMovies(1);
-    loadWatchlist();
-  }, [loadPopularMovies]);
+    if (user) {
+      loadPopularMovies(1);
+      loadWatchlist();
+    }
+  }, [user, loadPopularMovies]);
 
   const loadWatchlist = async () => {
     try {

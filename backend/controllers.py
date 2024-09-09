@@ -5,8 +5,9 @@ from config import MONGO_URI
 from backend.movie_services import fetch_movie_data
 import certifi
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from bson import ObjectId
+from datetime import timedelta
 
 try:
     client = MongoClient(MONGO_URI, server_api=ServerApi('1'), tlsCAFile=certifi.where())
@@ -15,7 +16,6 @@ try:
     users_collection = db['users']
 except PyMongoError as e:
     print(f"Failed to connect to the database: {str(e)}")
-
 
 def register_user(username, email, password):
     try:
@@ -36,7 +36,7 @@ def register_user(username, email, password):
     except PyMongoError as e:
         print(f"Username or email already exists: {str(e)}")
         return {'error': 'Registration failed'}, 500
-    
+
 def login_user(user_input, password, is_email=False):
     try:
         if is_email:
@@ -45,8 +45,14 @@ def login_user(user_input, password, is_email=False):
             user = users_collection.find_one({'username': user_input.lower()})
 
         if user and check_password_hash(user['password'], password):
-            access_token = create_access_token(identity=str(user['_id']))
-            return {'access_token': access_token}, 200
+            access_token = create_access_token(identity=str(user['_id']), expires_delta=timedelta(hours=1))
+            refresh_token = create_refresh_token(identity=str(user['_id']))
+            return {
+                'access_token': access_token,
+                'refresh_token': refresh_token,
+                'user_id': str(user['_id']),
+                'username': user['username']
+            }, 200
         else:
             return {'error': 'Invalid username/email or password'}, 401
     except PyMongoError as e:
@@ -57,7 +63,7 @@ def login_user(user_input, password, is_email=False):
 def get_user_profile():
     try:
         current_user_id = get_jwt_identity()
-        user = users_collection.find_one({'_id': current_user_id})
+        user = users_collection.find_one({'_id': ObjectId(current_user_id)})
         if user:
             user['_id'] = str(user['_id'])
             del user['password']  # Don't send password back to client
@@ -72,7 +78,7 @@ def get_user_profile():
 def update_user_profile(update_data):
     try:
         current_user_id = get_jwt_identity()
-        result = users_collection.update_one({'_id': current_user_id}, {'$set': update_data})
+        result = users_collection.update_one({'_id': ObjectId(current_user_id)}, {'$set': update_data})
         if result.modified_count:
             return {'message': 'Profile updated successfully'}, 200
         else:
@@ -82,20 +88,14 @@ def update_user_profile(update_data):
         return {'error': 'Failed to update user profile'}, 500
 
 def process_movies(title, year):
-
     existing_movie = collection.find_one({'title': title, 'year': year})
 
     if existing_movie:
-        # Convert ObjectId to string for JSON serialization
         existing_movie['_id'] = str(existing_movie['_id'])
-        
         return existing_movie
     else:
-        # Step 3: Fetch movie data from OMDb API
         movie_data = fetch_movie_data(title, year)
-
         if movie_data:
-            # Step 4: Insert the new movie into the database
             inserted_movie = insert_movie(movie_data)
             inserted_movie['_id'] = str(inserted_movie['_id'])
             return inserted_movie
@@ -142,7 +142,7 @@ def delete_movie(movie_id):
     except PyMongoError as e:
         print(f"An error occurred while deleting the movie: {str(e)}")
         return 0
-    
+
 @jwt_required()
 def get_watchlist():
     try:
@@ -168,19 +168,16 @@ def add_to_watchlist(movie_id):
         print('Movie Object ID: ', movie_object_id)
         print('Movie  ID: ', movie_id)
 
-        # First, check if the movie exists in the movies collection
         movie = collection.find_one({'_id': movie_object_id})
         if not movie:
             return {'error': 'Movie not found'}, 404
 
-        # Then, update the user's watchlist
         result = users_collection.update_one(
             {'_id': ObjectId(current_user_id)},
             {'$addToSet': {'watchlist': str(movie_object_id)}}
         )
         
         if result.modified_count:
-            # Fetch the updated user document
             updated_user = users_collection.find_one({'_id': ObjectId(current_user_id)})
             return {'message': 'Movie added to watchlist', 'watchlist': updated_user.get('watchlist', [])}, 200
         else:
@@ -204,3 +201,9 @@ def remove_from_watchlist(movie_id):
     except PyMongoError as e:
         print(f"An error occurred while removing from watchlist: {str(e)}")
         return {'error': 'Failed to remove movie from watchlist'}, 500
+
+@jwt_required(refresh=True)
+def refresh_access_token():
+    current_user_id = get_jwt_identity()
+    new_access_token = create_access_token(identity=current_user_id, expires_delta=timedelta(hours=1))
+    return {'access_token': new_access_token}, 200
