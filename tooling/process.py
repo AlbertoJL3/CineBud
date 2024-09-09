@@ -45,6 +45,7 @@ def process_csv(csv_file):
     movies = []
     for i, row in df.iterrows():
         movie = process_movies(row['title'], row['release_date'][:4])
+        print(row['title'])
         if movie:
             movies.append(movie)
     # write aditional data to csv
@@ -55,4 +56,5 @@ def process_csv(csv_file):
 
     return movies
 
-process_csv('backend/curation/data/Best_of_80s.csv')
+# process_csv('backend/curation/data/Best_of_80s.csv')
+process_csv('backend/curation/data/top_rated_movies.csv')

@@ -84,4 +84,12 @@ export const refreshToken = () => {
 };
 
 export const getTopRatedMovies = (page = 1, perPage = 15) => 
-  axiosInstance.get(`/top-rated-movies?page=${page}&per_page=${perPage}`).then(res => res.data);
+  axiosInstance.get(`/top-rated-movies?page=${page}&per_page=${perPage}`)
+    .then(res => {
+      console.log(`API response for page ${page}:`, res.data);
+      return res.data;
+    })
+    .catch(error => {
+      console.error(`API error for page ${page}:`, error);
+      throw error;
+    });

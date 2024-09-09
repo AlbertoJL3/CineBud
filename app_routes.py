@@ -210,7 +210,6 @@ def top_rated_movies():
         
         # Remove duplicates and extract the year from the release_date
         movies_data = movies_data.drop_duplicates(subset=['title'])
-        movies_data['year'] = pd.to_datetime(movies_data['release_date']).dt.year
 
         # Get pagination parameters from request
         page = int(request.args.get('page', 1))
