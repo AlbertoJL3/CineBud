@@ -86,10 +86,37 @@ export const refreshToken = () => {
 export const getTopRatedMovies = (page = 1, perPage = 15) => 
   axiosInstance.get(`/top-rated-movies?page=${page}&per_page=${perPage}`)
     .then(res => {
-      console.log(`API response for page ${page}:`, res.data);
       return res.data;
     })
     .catch(error => {
-      console.error(`API error for page ${page}:`, error);
       throw error;
+    });
+
+export const getBestOf70s = () => 
+  axiosInstance.get(`/best-of-70s`)
+    .then(res => {
+      console.log(res.data)
+      return res.data;
+    })
+    .catch(error => {
+      return error;
+    });
+
+export const getBestOf80s = () => 
+  axiosInstance.get(`/best-of-80s`)
+    .then(res => {
+      console.log(res.data)
+      return res.data;
+    })
+    .catch(error => {
+      return error;
+    });
+export const getBestOf90s = () => 
+  axiosInstance.get(`/best-of-90s`)
+    .then(res => {
+      console.log(res.data)
+      return res.data;
+    })
+    .catch(error => {
+      return error;
     });

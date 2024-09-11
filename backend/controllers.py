@@ -101,7 +101,37 @@ def process_movies(title, year):
             return inserted_movie
         else: 
             return []
+       
+import ast
 
+def clean_list(value):
+    if isinstance(value, str):
+        # Try to safely evaluate the string as a literal
+        try:
+            value = ast.literal_eval(value)
+        except (ValueError, SyntaxError):
+            pass
+    
+    if isinstance(value, list):
+        # Flatten the list and remove extra quotes
+        return [item.strip("'") for sublist in value for item in (sublist if isinstance(sublist, list) else [sublist])]
+    else:
+        return [str(value).strip("'")]
+
+def process_cached_movies(row):
+    data = row.to_dict()  # Convert Series to dictionary
+    
+    # Process specific fields
+    for field in ['genres', 'actors', 'director']:
+        if field in data:
+            data[field] = clean_list(data[field])
+
+    # Ensure all data is JSON serializable
+    for key, value in data.items():
+        if isinstance(value, ObjectId):
+            data[key] = str(value)
+
+    return data
 def insert_movie(movie_data):
     result = collection.insert_one(movie_data)
     inserted_id = result.inserted_id

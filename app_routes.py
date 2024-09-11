@@ -6,12 +6,14 @@ from flask import render_template
 import pandas as pd
 from backend import fetch_movie_data, get_chatgpt_response, handle_prompt, load_movies_from_json
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token, create_refresh_token
-from backend.controllers import get_watchlist, add_to_watchlist, remove_from_watchlist
+from backend.controllers import get_watchlist, add_to_watchlist, remove_from_watchlist, process_cached_movies
 import os
 from dotenv import load_dotenv
 import bson.errors as bson_errors
-from bson import ObjectId
+from bson import ObjectId, json_util
 from datetime import timedelta
+import json
+
 
 load_dotenv()
 
@@ -207,29 +209,90 @@ def top_rated_movies():
     try:
         # Read the CSV file
         movies_data = pd.read_csv('backend/curation/data/top_rated_movies.csv')
-        
-        # Remove duplicates and extract the year from the release_date
-        movies_data = movies_data.drop_duplicates(subset=['title'])
-
-        # Get pagination parameters from request
-        page = int(request.args.get('page', 1))
-        per_page = int(request.args.get('per_page', 15))  # Default to 15 movies per page
-
-        # Calculate start and end index for pagination
-        start = (page - 1) * per_page
-        end = start + per_page
 
         movies = []
-        for _, row in movies_data.iloc[start:end].iterrows():
+        for _, row in movies_data.iterrows():
+            print('fetching: ', row['title'])
             # Fetch detailed movie data using the process_movies function
-            movie_data = process_movies(row['title'], str(row['year']))
-            if movie_data:
-                movies.append(movie_data)
+            movie_data = process_cached_movies(row)
+            # clean movie_data information of [, and '
+            
+            movies.append(movie_data)
         
-        return jsonify(movies)
+        # Convert the list of movies to a JSON-serializable format
+        json_compatible_movies = json.loads(json_util.dumps(movies))
+        
+        return jsonify(json_compatible_movies)
     except Exception as e:
         print(e)
         return jsonify({'error': 'An error occurred processing the request'}), 500
+
+@app.route('/best-of-70s', methods=['GET'])
+def getBestOf70s():
+    try:
+        # Read the CSV file
+        movies_data = pd.read_csv('backend/curation/data/Best_of_70s.csv')
+        movies = []
+        for _, row in movies_data.iterrows():
+            print('fetching: ', row['title'])
+            # Fetch detailed movie data using the process_movies function
+            movie_data = process_cached_movies(row)
+            # clean movie_data information of [, and '
+            
+            movies.append(movie_data)
+        
+        # Convert the list of movies to a JSON-serializable format
+        json_compatible_movies = json.loads(json_util.dumps(movies))
+        
+        return jsonify(json_compatible_movies)
+    except Exception as e:
+        print(e)
+        return str(e), 500
+
+@app.route('/best-of-80s', methods=['GET'])
+def getBestOf80s():
+    try:
+        # Read the CSV file
+        movies_data = pd.read_csv('backend/curation/data/Best_of_80s.csv')
+        movies = []
+        for _, row in movies_data.iterrows():
+            print('fetching: ', row['title'])
+            # Fetch detailed movie data using the process_movies function
+            movie_data = process_cached_movies(row)
+            # clean movie_data information of [, and '
+            
+            movies.append(movie_data)
+        
+        # Convert the list of movies to a JSON-serializable format
+        json_compatible_movies = json.loads(json_util.dumps(movies))
+        
+        return jsonify(json_compatible_movies)
+    except Exception as e:
+        print(e)
+        return str(e), 500
+
+@app.route('/best-of-90s', methods=['GET'])
+def getBestOf90s():
+    try:
+        # Read the CSV file
+        movies_data = pd.read_csv('backend/curation/data/Best_of_90s.csv')
+        movies = []
+        for _, row in movies_data.iterrows():
+            print('fetching: ', row['title'])
+            # Fetch detailed movie data using the process_movies function
+            movie_data = process_cached_movies(row)
+            # clean movie_data information of [, and '
+            
+            movies.append(movie_data)
+        
+        # Convert the list of movies to a JSON-serializable format
+        json_compatible_movies = json.loads(json_util.dumps(movies))
+        
+        return jsonify(json_compatible_movies)
+    except Exception as e:
+        print(e)
+        return str(e), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
