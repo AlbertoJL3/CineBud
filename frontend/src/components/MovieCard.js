@@ -35,10 +35,8 @@ function MovieCard({ movie, isInWatchlist, onWatchlistChange }) {
     ? `${movie.plot.substring(0, maxLength)}...`
     : movie.plot;
 
-  // Helper function to ensure we always have an array
   const ensureArray = (item) => Array.isArray(item) ? item : [item];
 
-  // Helper function to safely get string value
   const safeString = (value) => {
     if (typeof value === 'string') return value;
     if (typeof value === 'number') return value.toString();
@@ -49,13 +47,13 @@ function MovieCard({ movie, isInWatchlist, onWatchlistChange }) {
 
   return (
     <div className="movie-card">
-      <div className="watchlist-button" onClick={toggleWatchlist}>
+      <button className="watchlist-button" onClick={toggleWatchlist}>
         {localIsInWatchlist ? (
           <span className="checkmark">✓</span>
         ) : (
           <span className="plus-sign">+</span>
         )}
-      </div>
+      </button>
       <img src={safeString(movie.poster)} alt={`${safeString(movie.title)} poster`} className="movie-poster" />
       <div className="movie-info">
         <h3>{safeString(movie.title)}</h3>

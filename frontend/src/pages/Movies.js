@@ -188,7 +188,7 @@ function Movies() {
               <div className="movie-card-wrapper" key={movie._id || movie.id}>
                 <MovieCard 
                   movie={movie} 
-                  isInWatchlist={watchlist.some(w => w._id === movie._id)}
+                  isInWatchlist={watchlist.some(w => w.id === movie._id)}
                   onWatchlistChange={handleWatchlistChange}
                 />
               </div>

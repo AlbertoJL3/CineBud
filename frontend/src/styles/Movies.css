@@ -3,30 +3,31 @@
   flex-direction: column;
   align-items: center;
   min-height: 92.5vh;
-  min-width: 100%;
+  width: 100%;
   overflow-x: hidden;
   color: white;
   background: black;
-  font-size: 13px;
+  font-size: 16px;
+  padding: 20px 0;
 }
 
 .movies-page h2 {
   color: white;
   text-align: center;
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .movie-card-wrapper {
   flex: 0 0 auto;
   margin-right: 20px;
-  width: 200px;
+  width: 220px;
 }
 
 .prompt-results-wrapper {
   position: relative;
   margin: 20px 0;
-  padding: 0 50px;
   width: 100%;
   max-width: 1200px;
   color: white;
@@ -62,7 +63,7 @@
   height: 40px;
   border: none;
   border-radius: 50%;
-  background: black;
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
@@ -73,15 +74,15 @@
 }
 
 .scroll-button:hover {
-  background: rgb(255, 0, 0);
+  background: rgba(255, 0, 0, 0.7);
 }
 
 .scroll-button.left {
-  left: 0px;
+  left: 10px;
 }
 
 .scroll-button.right {
-  right: 0px;
+  right: 10px;
 }
 
 .scroll-button i {
@@ -93,10 +94,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  left: 42%;
-  min-width: 200px;
-  height: 300px;
+  width: 220px;
+  height: 330px;
 }
 
 .spinner {
@@ -114,18 +113,59 @@
 }
 
 .error {
-  color: red;
+  color: #ff6b6b;
   margin-top: 20px;
   text-align: center;
+  font-size: 18px;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.tab-buttons button {
+  padding: 12px 24px;
+  margin: 10px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 25px;
+  font-size: 16px;
+}
+
+.tab-buttons button.active {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.tab-buttons button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 @media (max-width: 768px) {
+  .movies-page {
+    font-size: 14px;
+  }
+
+  .movies-page h2 {
+    font-size: 24px;
+  }
+
+  .movie-card-wrapper {
+    width: 180px;
+  }
+
   .scroll-container {
     padding: 0 40px;
   }
-  
+
   .prompt-results-wrapper {
-    padding: 0 30px;
+    padding: 0 10px;
   }
 
   .scroll-button {
@@ -136,25 +176,37 @@
   .scroll-button i {
     font-size: 16px;
   }
+
+  .tab-buttons button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
 }
 
-.tab-buttons {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
+@media (max-width: 480px) {
+  .movies-page h2 {
+    font-size: 20px;
+  }
 
-.tab-buttons button {
-  padding: 10px 20px;
-  margin: 0 10px;
-  border: none;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  border-radius: 20px;
-}
+  .movie-card-wrapper {
+    width: 150px;
+  }
 
-.tab-buttons button.active {
-  background-color: rgba(255, 255, 255, 0.3);
+  .scroll-container {
+    padding: 0 30px;
+  }
+
+  .scroll-button {
+    width: 25px;
+    height: 25px;
+  }
+
+  .scroll-button i {
+    font-size: 14px;
+  }
+
+  .tab-buttons button {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
 }

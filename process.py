@@ -57,4 +57,4 @@ def process_csv(csv_file):
     return movies
 
 # process_csv('backend/curation/data/Best_of_80s.csv')
-process_csv('backend/curation/data/top_rated_movies.csv')
+process_csv('backend/curation/data/popularity_movies.csv')

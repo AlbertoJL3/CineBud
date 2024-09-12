@@ -153,28 +153,21 @@ def movie_results():
 def popular_movies():
     try:
         # Read the CSV file
-        movies_data = pd.read_csv(r'backend/curation/data/popularity_movies.csv')
-        
-        # Remove duplicates and extract the year from the release_date
-        movies_data = movies_data.drop_duplicates(subset=['title'])
-        movies_data['year'] = pd.to_datetime(movies_data['release_date']).dt.year
-
-        # Get pagination parameters from request
-        page = int(request.args.get('page', 1))
-        per_page = int(request.args.get('per_page', 15))  # Default to 15 movies per page
-
-        # Calculate start and end index for pagination
-        start = (page - 1) * per_page
-        end = start + per_page
+        movies_data = pd.read_csv('backend/curation/data/popularity_movies.csv')
 
         movies = []
-        for _, row in movies_data.iloc[start:end].iterrows():
-            # Fetch detailed movie data using the fetch_movie_data function
-            movie_data = process_movies(row['title'], str(row['year']))
-            if movie_data:
-                movies.append(movie_data)
+        for _, row in movies_data.iterrows():
+            print('fetching: ', row['title'])
+            # Fetch detailed movie data using the process_movies function
+            movie_data = process_cached_movies(row)
+            # clean movie_data information of [, and '
+            
+            movies.append(movie_data)
         
-        return jsonify(movies)
+        # Convert the list of movies to a JSON-serializable format
+        json_compatible_movies = json.loads(json_util.dumps(movies))
+        
+        return jsonify(json_compatible_movies)
     except Exception as e:
         print(e)
         return jsonify({'error': 'An error occurred processing the request'}), 500
