@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from bson import ObjectId
 from datetime import timedelta
+from datetime import datetime
 
 try:
     client = MongoClient(MONGO_URI, server_api=ServerApi('1'), tlsCAFile=certifi.where())
@@ -58,6 +59,22 @@ def login_user(user_input, password, is_email=False):
     except PyMongoError as e:
         print(f"Invalid username/email or password: {str(e)}")
         return {'error': 'Login failed'}, 500
+
+def save_prompt_results(user_id, prompt, movie_ids):
+    truncated_prompt = prompt[:100]  # Limit prompt to 100 characters
+    prompt_result = {
+        'prompt': truncated_prompt,
+        'movie_ids': movie_ids,
+        'timestamp': datetime.utcnow()
+    }
+    users_collection.update_one(
+        {'_id': ObjectId(user_id)},
+        {'$push': {'prompt_results': prompt_result}}
+    )
+
+def get_user_prompt_results(user_id):
+    user = users_collection.find_one({'_id': ObjectId(user_id)})
+    return user.get('prompt_results', [])
 
 @jwt_required()
 def get_user_profile():

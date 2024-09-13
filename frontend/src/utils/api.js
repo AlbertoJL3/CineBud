@@ -120,3 +120,9 @@ export const getBestOf90s = () =>
     .catch(error => {
       return error;
     });
+    
+export const savePromptResults = (prompt, movieIds) => 
+  axiosInstance.post('/save_prompt_results', { prompt, movie_ids: movieIds }).then(res => res.data);
+
+export const getPromptResults = () => 
+  axiosInstance.get('/get_prompt_results').then(res => res.data);

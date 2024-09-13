@@ -6,7 +6,7 @@ from flask import render_template
 import pandas as pd
 from backend import fetch_movie_data, get_chatgpt_response, handle_prompt, load_movies_from_json
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token, create_refresh_token
-from backend.controllers import get_watchlist, add_to_watchlist, remove_from_watchlist, process_cached_movies
+from backend.controllers import get_watchlist, add_to_watchlist, remove_from_watchlist, process_cached_movies, save_prompt_results, get_user_prompt_results
 import os
 from dotenv import load_dotenv
 import bson.errors as bson_errors
@@ -286,6 +286,23 @@ def getBestOf90s():
         print(e)
         return str(e), 500
 
+
+@app.route('/save_prompt_results', methods=['POST'])
+@jwt_required()
+def save_prompt_results_route():
+    current_user_id = get_jwt_identity()
+    data = request.json
+    prompt = data.get('prompt')
+    movie_ids = data.get('movie_ids')
+    save_prompt_results(current_user_id, prompt, movie_ids)
+    return jsonify({'message': 'Prompt results saved successfully'}), 200
+
+@app.route('/get_prompt_results', methods=['GET'])
+@jwt_required()
+def get_prompt_results_route():
+    current_user_id = get_jwt_identity()
+    results = get_user_prompt_results(current_user_id)
+    return jsonify(results), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

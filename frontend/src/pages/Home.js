@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { submitPrompt, getPopularMovies, getTopRatedMovies, getWatchlist, addToWatchlist, removeFromWatchlist, refreshToken } from '../utils/api';
+import { submitPrompt, getPopularMovies, getTopRatedMovies, getWatchlist, addToWatchlist, removeFromWatchlist, refreshToken, savePromptResults, getPromptResults } from '../utils/api';
 import { useAuth } from '../utils/AuthContext';
 import Loading from '../components/Loading';
 import MovieCard from '../components/MovieCard';
@@ -16,6 +16,7 @@ function Home() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [watchlist, setWatchlist] = useState([]);
+  const [savedPromptResults, setSavedPromptResults] = useState([]);
   const promptScrollContainerRef = useRef(null);
   const popularMoviesScrollContainerRef = useRef(null);
   const loadingRef = useRef(false);
@@ -61,6 +62,7 @@ function Home() {
     if (user) {
       loadPopularMovies(1);
       loadWatchlist();
+      loadSavedPromptResults();
     }
   }, [user, loadPopularMovies]);
 
@@ -70,6 +72,15 @@ function Home() {
       setWatchlist(watchlistData);
     } catch (err) {
       console.error('Failed to load watchlist:', err);
+    }
+  };
+
+  const loadSavedPromptResults = async () => {
+    try {
+      const results = await getPromptResults();
+      setSavedPromptResults(results);
+    } catch (err) {
+      console.error('Failed to load saved prompt results:', err);
     }
   };
 
@@ -95,6 +106,9 @@ function Home() {
     try {
       const results = await submitPrompt(prompt);
       setPromptResults(results);
+      // Save prompt results
+      await savePromptResults(prompt, results.map(movie => movie._id));
+      await loadSavedPromptResults();  // Reload saved results
       setPrompt('');
       setTimeout(() => {
         const resultsWrapper = document.querySelector('.prompt-results-wrapper');
@@ -145,6 +159,30 @@ function Home() {
       }
     }
   }, [loadPopularMovies, page, hasMore]);
+
+  const renderSavedPromptResults = () => (
+    <div className="saved-prompt-results">
+      <h2>Your Previous Searches</h2>
+      {savedPromptResults.map((result, index) => (
+        <div key={index} className="saved-prompt-result">
+          <h3>{result.prompt}</h3>
+          <div className="saved-movies-container">
+            {result.movie_ids.map(movieId => {
+              const movie = popularMovies.find(m => m._id === movieId);
+              return movie ? (
+                <MovieCard 
+                  key={movieId}
+                  movie={movie} 
+                  isInWatchlist={watchlist.some(w => w._id === movie._id)}
+                  onWatchlistChange={handleWatchlistChange}
+                />
+              ) : null;
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   if (loading) {
     return <Loading />;
@@ -230,10 +268,10 @@ function Home() {
           )}
         </div>
       </div>
+
+      {renderSavedPromptResults()}
     </div>
-    
   );
-  
 }
 
 export default Home;
