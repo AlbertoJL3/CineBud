@@ -3,7 +3,6 @@ requests
 pymongo
 python-dotenv
 flask
-pymongo
 requests
 openai==0.28
 flask_cors

@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template, url_for, request
 from flask_cors import CORS
-from backend import insert_movie, get_movie, get_all_movies, update_movie, delete_movie, fetch_movie_data, process_movies
+from backend.controllers import insert_movie, get_movie, get_all_movies, update_movie, delete_movie, fetch_movie_data, process_movies
 from backend import register_user, login_user, get_user_profile, update_user_profile
 from flask import render_template
 import pandas as pd
@@ -13,7 +13,6 @@ import bson.errors as bson_errors
 from bson import ObjectId, json_util
 from datetime import timedelta
 import json
-
 
 load_dotenv()
 
