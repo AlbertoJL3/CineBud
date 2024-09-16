@@ -238,3 +238,22 @@
     width: calc(100% - 40px);
   }
 }
+.prompt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.delete-prompt-btn {
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: color 0.3s ease;
+}
+
+.delete-prompt-btn:hover {
+  color: #ff0000;
+}

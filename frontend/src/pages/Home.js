@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { submitPrompt, getPopularMovies, getTopRatedMovies, getWatchlist, addToWatchlist, removeFromWatchlist, refreshToken, savePromptResults, getPromptResults } from '../utils/api';
+import { submitPrompt, getPopularMovies, getWatchlist, addToWatchlist, removeFromWatchlist, refreshToken, savePromptResults, getPromptResults, deletePromptResult } from '../utils/api';
 import { useAuth } from '../utils/AuthContext';
 import Loading from '../components/Loading';
 import MovieCard from '../components/MovieCard';
@@ -12,12 +12,10 @@ function Home() {
   const [popularMoviesLoading, setPopularMoviesLoading] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [error, setError] = useState(null);
-  const [promptResults, setPromptResults] = useState([]);
+  const [currentPromptResult, setCurrentPromptResult] = useState(null);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [watchlist, setWatchlist] = useState([]);
-  const [savedPromptResults, setSavedPromptResults] = useState([]);
-  const promptScrollContainerRef = useRef(null);
   const popularMoviesScrollContainerRef = useRef(null);
   const loadingRef = useRef(false);
   const { user, logout } = useAuth();
@@ -34,7 +32,7 @@ function Home() {
         setPopularMovies(prevMovies => {
           const newMovies = [...prevMovies, ...data];
           return newMovies.filter((movie, index, self) =>
-            index === self.findIndex((t) => t.id === movie.id)
+            index === self.findIndex((t) => t._id === movie._id)
           );
         });
         setPage(pageNum);
@@ -44,11 +42,10 @@ function Home() {
       if (err.response && err.response.status === 401) {
         try {
           await refreshToken();
-          // Retry loading popular movies after refreshing token
           await loadPopularMovies(pageNum);
         } catch (refreshError) {
           console.error('Token refresh failed:', refreshError);
-          logout();  // Force logout if token refresh fails
+          logout();
         }
       }
       setHasMore(false);
@@ -57,14 +54,6 @@ function Home() {
       loadingRef.current = false;
     }
   }, [hasMore, logout]);
-
-  useEffect(() => {
-    if (user) {
-      loadPopularMovies(1);
-      loadWatchlist();
-      loadSavedPromptResults();
-    }
-  }, [user, loadPopularMovies]);
 
   const loadWatchlist = async () => {
     try {
@@ -75,14 +64,13 @@ function Home() {
     }
   };
 
-  const loadSavedPromptResults = async () => {
-    try {
-      const results = await getPromptResults();
-      setSavedPromptResults(results);
-    } catch (err) {
-      console.error('Failed to load saved prompt results:', err);
+  useEffect(() => {
+    if (user) {
+      loadPopularMovies(1);
+      loadWatchlist();
+      loadSavedPromptResults();
     }
-  };
+  }, [user, loadPopularMovies, loadSavedPromptResults]);
 
   const handleWatchlistChange = async (movieId, isAdding) => {
     try {
@@ -105,17 +93,8 @@ function Home() {
     setError(null);
     try {
       const results = await submitPrompt(prompt);
-      setPromptResults(results);
-      // Save prompt results
-      await savePromptResults(prompt, results.map(movie => movie._id));
-      await loadSavedPromptResults();  // Reload saved results
+      setCurrentPromptResult({ prompt, movies: results });
       setPrompt('');
-      setTimeout(() => {
-        const resultsWrapper = document.querySelector('.prompt-results-wrapper');
-        if (resultsWrapper) {
-          resultsWrapper.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
     } catch (err) {
       setError('Failed to process prompt');
     } finally {
@@ -129,17 +108,6 @@ function Home() {
       handlePromptSubmit(e);
     }
   };
-
-  const scroll = useCallback((direction, containerRef) => {
-    const container = containerRef.current;
-    if (container) {
-      const scrollAmount = container.offsetWidth * 0.8;
-      container.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
-    }
-  }, []);
 
   const handleRightScroll = useCallback(() => {
     const container = popularMoviesScrollContainerRef.current;
@@ -159,30 +127,6 @@ function Home() {
       }
     }
   }, [loadPopularMovies, page, hasMore]);
-
-  const renderSavedPromptResults = () => (
-    <div className="saved-prompt-results">
-      <h2>Your Previous Searches</h2>
-      {savedPromptResults.map((result, index) => (
-        <div key={index} className="saved-prompt-result">
-          <h3>{result.prompt}</h3>
-          <div className="saved-movies-container">
-            {result.movie_ids.map(movieId => {
-              const movie = popularMovies.find(m => m._id === movieId);
-              return movie ? (
-                <MovieCard 
-                  key={movieId}
-                  movie={movie} 
-                  isInWatchlist={watchlist.some(w => w._id === movie._id)}
-                  onWatchlistChange={handleWatchlistChange}
-                />
-              ) : null;
-            })}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
 
   if (loading) {
     return <Loading />;
@@ -205,16 +149,25 @@ function Home() {
 
       {error && <div className="error">{error}</div>}
 
-      {promptResults.length > 0 && (
-        <div className="prompt-results-wrapper">
-          <h2>Prompt Results</h2>
+      {currentPromptResult && (
+        <div className="current-prompt-result">
+          <h2>Current Prompt Result</h2>
+          <div className="prompt-header">
+            <h3>{currentPromptResult.prompt}</h3>
+            <button onClick={handleSavePrompt} className="save-prompt-btn" aria-label="Save prompt">
+              <i className="fas fa-check"></i>
+            </button>
+          </div>
           <div className="scroll-container">
-            <button className="scroll-button left" onClick={() => scroll('left', promptScrollContainerRef)} aria-label="Scroll left">
+            <button className="scroll-button left" onClick={() => {
+              const container = document.querySelector('.current-prompt-result .prompt-results-container');
+              container.scrollBy({ left: -container.offsetWidth * 0.8, behavior: 'smooth' });
+            }} aria-label="Scroll left">
               <i className="fas fa-chevron-left"></i>
             </button>
-            <div className="prompt-results-container" ref={promptScrollContainerRef}>
-              {promptResults.map((movie) => (
-                <div className="movie-card-wrapper" key={movie.id}>
+            <div className="prompt-results-container">
+              {currentPromptResult.movies.map((movie) => (
+                <div className="movie-card-wrapper" key={movie._id}>
                   <MovieCard 
                     movie={movie} 
                     isInWatchlist={watchlist.some(w => w._id === movie._id)}
@@ -223,7 +176,10 @@ function Home() {
                 </div>
               ))}
             </div>
-            <button className="scroll-button right" onClick={() => scroll('right', promptScrollContainerRef)} aria-label="Scroll right">
+            <button className="scroll-button right" onClick={() => {
+              const container = document.querySelector('.current-prompt-result .prompt-results-container');
+              container.scrollBy({ left: container.offsetWidth * 0.8, behavior: 'smooth' });
+            }} aria-label="Scroll right">
               <i className="fas fa-chevron-right"></i>
             </button>
           </div>
@@ -235,14 +191,23 @@ function Home() {
         <div className="scroll-container">
           <button 
             className="scroll-button left" 
-            onClick={() => scroll('left', popularMoviesScrollContainerRef)} 
+            onClick={() => {
+              const container = popularMoviesScrollContainerRef.current;
+              if (container) {
+                const scrollAmount = container.offsetWidth * 0.8;
+                container.scrollBy({
+                  left: -scrollAmount,
+                  behavior: 'smooth'
+                });
+              }
+            }} 
             aria-label="Scroll left"
           >
             <i className="fas fa-chevron-left"></i>
           </button>
           <div className="prompt-results-container" ref={popularMoviesScrollContainerRef}>
             {popularMovies.map((movie) => (
-              <div className="movie-card-wrapper" key={movie.id}>
+              <div className="movie-card-wrapper" key={movie._id}>
                 <MovieCard 
                   movie={movie} 
                   isInWatchlist={watchlist.some(w => w._id === movie._id)}
@@ -268,8 +233,6 @@ function Home() {
           )}
         </div>
       </div>
-
-      {renderSavedPromptResults()}
     </div>
   );
 }

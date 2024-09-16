@@ -40,6 +40,8 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+export const getMoviesByIds = (movie_ids) => axiosInstance.get('/movies-by-ids', { movie_ids }).then(res => res.data);
+
 export const fetchMovies = () => axiosInstance.get('/movies').then(res => res.data);
 
 export const addMovie = (title, year) => axiosInstance.post('/movies', { title, year }).then(res => res.data);
@@ -126,3 +128,6 @@ export const savePromptResults = (prompt, movieIds) =>
 
 export const getPromptResults = () => 
   axiosInstance.get('/get_prompt_results').then(res => res.data);
+
+export const deletePromptResult = (promptId) => 
+  axiosInstance.delete(`/delete_prompt_result/${promptId}`).then(res => res.data);

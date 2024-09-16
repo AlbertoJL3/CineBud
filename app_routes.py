@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template, url_for, request
 from flask_cors import CORS
-from backend.controllers import insert_movie, get_movie, get_all_movies, update_movie, delete_movie, fetch_movie_data, process_movies
+from backend.controllers import insert_movie, get_movie, get_all_movies, update_movie, delete_movie, fetch_movie_data, process_movies, delete_prompt_result
 from backend import register_user, login_user, get_user_profile, update_user_profile
 from flask import render_template
 import pandas as pd
@@ -98,6 +98,17 @@ def get_movie_by_id(movie_id):
     if movie:
         return jsonify(movie)
     return jsonify({'error': 'Movie not found'}), 404
+
+@app.route('/movies-by-ids', methods=['GET'])
+@jwt_required()
+def get_movies_by_ids():
+    movie_ids = request.json.get('movie_ids')
+    movies = []
+    for movie_id in movie_ids:
+        movie = get_movie(movie_id)
+        if movie:
+            movies.append(movie)
+    return jsonify(movies)
 
 @app.route('/movies', methods=['GET'])
 @jwt_required()
@@ -302,6 +313,13 @@ def get_prompt_results_route():
     current_user_id = get_jwt_identity()
     results = get_user_prompt_results(current_user_id)
     return jsonify(results), 200
+
+@app.route('/delete_prompt_result/<prompt_id>', methods=['DELETE'])
+@jwt_required()
+def delete_prompt_result_route(prompt_id):
+    current_user_id = get_jwt_identity()
+    delete_prompt_result(current_user_id, prompt_id)
+    return jsonify({'message': 'Prompt result deleted successfully'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

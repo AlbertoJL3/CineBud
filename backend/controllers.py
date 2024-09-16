@@ -63,6 +63,7 @@ def login_user(user_input, password, is_email=False):
 def save_prompt_results(user_id, prompt, movie_ids):
     truncated_prompt = prompt[:100]  # Limit prompt to 100 characters
     prompt_result = {
+        '_id': ObjectId(),  # Generate a new ObjectId for the prompt result
         'prompt': truncated_prompt,
         'movie_ids': movie_ids,
         'timestamp': datetime.utcnow()
@@ -90,6 +91,17 @@ def get_user_profile():
     except PyMongoError as e:
         print(f"An error occurred while fetching the user profile: {str(e)}")
         return {'error': 'Failed to fetch user profile'}, 500
+
+@jwt_required()
+def delete_prompt_result(current_user_id, prompt_id):
+    try:
+        result = users_collection.update_one(
+            {'_id': ObjectId(current_user_id)},
+            {'$pull': {'prompt_results': {'_id': ObjectId(prompt_id)}}}
+        )
+    except Exception as e:
+        print(f"An error occurred while deleting prompt result: {str(e)}")
+        return {'error': 'Failed to delete prompt result'}, 500
 
 @jwt_required()
 def update_user_profile(update_data):
@@ -159,7 +171,7 @@ def insert_movie(movie_data):
 
 def get_movie(movie_id):
     try:
-        return collection.find_one({'id': movie_id})
+        return collection.find_one({'_id': ObjectId(movie_id)})
     except PyMongoError as e:
         print(f"An error occurred while fetching the movie: {str(e)}")
         return None
