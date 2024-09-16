@@ -167,7 +167,6 @@ def popular_movies():
 
         movies = []
         for _, row in movies_data.iterrows():
-            print('fetching: ', row['title'])
             # Fetch detailed movie data using the process_movies function
             movie_data = process_cached_movies(row)
             # clean movie_data information of [, and '
@@ -215,7 +214,6 @@ def top_rated_movies():
 
         movies = []
         for _, row in movies_data.iterrows():
-            print('fetching: ', row['title'])
             # Fetch detailed movie data using the process_movies function
             movie_data = process_cached_movies(row)
             # clean movie_data information of [, and '
@@ -237,7 +235,6 @@ def getBestOf70s():
         movies_data = pd.read_csv('backend/curation/data/Best_of_70s.csv')
         movies = []
         for _, row in movies_data.iterrows():
-            print('fetching: ', row['title'])
             # Fetch detailed movie data using the process_movies function
             movie_data = process_cached_movies(row)
             # clean movie_data information of [, and '
@@ -259,7 +256,6 @@ def getBestOf80s():
         movies_data = pd.read_csv('backend/curation/data/Best_of_80s.csv')
         movies = []
         for _, row in movies_data.iterrows():
-            print('fetching: ', row['title'])
             # Fetch detailed movie data using the process_movies function
             movie_data = process_cached_movies(row)
             # clean movie_data information of [, and '
@@ -281,7 +277,6 @@ def getBestOf90s():
         movies_data = pd.read_csv('backend/curation/data/Best_of_90s.csv')
         movies = []
         for _, row in movies_data.iterrows():
-            print('fetching: ', row['title'])
             # Fetch detailed movie data using the process_movies function
             movie_data = process_cached_movies(row)
             # clean movie_data information of [, and '

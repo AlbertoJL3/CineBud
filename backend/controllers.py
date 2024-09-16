@@ -121,12 +121,14 @@ def process_movies(title, year):
 
     if existing_movie:
         existing_movie['_id'] = str(existing_movie['_id'])
+        print('found existing movie', existing_movie['title'])
         return existing_movie
     else:
         movie_data = fetch_movie_data(title, year)
         if movie_data:
             inserted_movie = insert_movie(movie_data)
             inserted_movie['_id'] = str(inserted_movie['_id'])
+            print('inserted movie', inserted_movie['title'])
             return inserted_movie
         else: 
             return []
